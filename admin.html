@@ -61,7 +61,39 @@
         <aside class="w-64 bg-white border-r border-slate-200 flex-shrink-0"><div class="p-6 text-center border-b"><h1 class="text-2xl font-extrabold text-indigo-600 tracking-wider">ADMIN</h1></div><nav class="mt-6"><a id="nav-dashboard" class="sidebar-link flex items-center px-6 py-3 text-slate-700"><i class="fas fa-tachometer-alt w-6 mr-4"></i> Dashboard</a><a id="nav-reviews" class="sidebar-link flex items-center px-6 py-3 text-slate-700"><i class="fas fa-star w-6 mr-4"></i> Reviews</a><a id="nav-gigs" class="sidebar-link flex items-center px-6 py-3 text-slate-700"><i class="fas fa-guitar w-6 mr-4"></i> Gigs</a><a id="nav-users" class="sidebar-link flex items-center px-6 py-3 text-slate-700"><i class="fas fa-users w-6 mr-4"></i> Users</a><a id="nav-settings" class="sidebar-link flex items-center px-6 py-3 text-slate-700"><i class="fas fa-cog w-6 mr-4"></i> Settings</a></nav></aside>
 
         <main class="flex-1 p-8 overflow-y-auto">
-            <div id="dashboard-content"><h1 class="text-3xl font-bold text-slate-900 mb-4">Dashboard</h1><p class="text-slate-600">Welcome to the admin panel. Select a tab from the sidebar to get started.</p></div>
+            <div id="dashboard-content">
+                <h1 class="text-3xl font-bold text-slate-900 mb-2">Welcome Back!</h1>
+                <p class="text-slate-600 mb-8">Here's a snapshot of your site's activity.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="bg-white p-6 rounded-xl shadow-md border flex items-center"><div class="p-4 bg-cyan-100 text-cyan-600 rounded-full mr-4"><i class="fas fa-calendar-alt fa-2x"></i></div><div><p class="text-sm text-slate-500 font-medium">Upcoming Gigs</p><p id="dashboard-stat-upcoming" class="text-3xl font-bold">0</p></div></div>
+                    <div class="bg-white p-6 rounded-xl shadow-md border flex items-center"><div class="p-4 bg-yellow-100 text-yellow-600 rounded-full mr-4"><i class="fas fa-hourglass-half fa-2x"></i></div><div><p class="text-sm text-slate-500 font-medium">Pending Reviews</p><p id="dashboard-stat-pending" class="text-3xl font-bold">0</p></div></div>
+                    <div class="bg-white p-6 rounded-xl shadow-md border flex items-center"><div class="p-4 bg-purple-100 text-purple-600 rounded-full mr-4"><i class="fas fa-guitar fa-2x"></i></div><div><p class="text-sm text-slate-500 font-medium">Total Gigs</p><p id="dashboard-stat-total-gigs" class="text-3xl font-bold">0</p></div></div>
+                    <div class="bg-white p-6 rounded-xl shadow-md border flex items-center"><div class="p-4 bg-green-100 text-green-600 rounded-full mr-4"><i class="fas fa-users fa-2x"></i></div><div><p class="text-sm text-slate-500 font-medium">Total Reviews</p><p id="dashboard-stat-total-reviews" class="text-3xl font-bold">0</p></div></div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div class="lg:col-span-2 bg-white rounded-xl shadow-md border">
+                        <div class="p-6 border-b flex justify-between items-center">
+                            <h2 class="text-xl font-semibold">Upcoming Gigs</h2>
+                            <button id="dashboard-view-gigs-btn" class="text-sm font-semibold text-indigo-600 hover:text-indigo-800">View All &rarr;</button>
+                        </div>
+                        <div id="dashboard-upcoming-gigs" class="p-6 space-y-4">
+                            <p class="text-slate-500 text-center py-8">Loading upcoming gigs...</p>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-md border">
+                        <div class="p-6 border-b flex justify-between items-center">
+                            <h2 class="text-xl font-semibold">Pending Reviews</h2>
+                            <button id="dashboard-view-reviews-btn" class="text-sm font-semibold text-indigo-600 hover:text-indigo-800">View All &rarr;</button>
+                        </div>
+                        <div id="dashboard-pending-reviews" class="p-6 space-y-4">
+                            <p class="text-slate-500 text-center py-8">Loading pending reviews...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div id="reviews-content" class="hidden"><h1 class="text-3xl font-bold text-slate-900 mb-8">Reviews Management</h1><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8"><div class="bg-white p-6 rounded-xl shadow-md border flex items-center"><div class="p-4 bg-blue-100 text-blue-600 rounded-full mr-4"><i class="fas fa-star fa-2x"></i></div><div><p class="text-sm text-slate-500 font-medium">Total Reviews</p><p id="stat-total-reviews" class="text-3xl font-bold">0</p></div></div><div class="bg-white p-6 rounded-xl shadow-md border flex items-center"><div class="p-4 bg-green-100 text-green-600 rounded-full mr-4"><i class="fas fa-check-circle fa-2x"></i></div><div><p class="text-sm text-slate-500 font-medium">Approved Reviews</p><p id="stat-approved-reviews" class="text-3xl font-bold">0</p></div></div><div class="bg-white p-6 rounded-xl shadow-md border flex items-center"><div class="p-4 bg-yellow-100 text-yellow-600 rounded-full mr-4"><i class="fas fa-hourglass-half fa-2x"></i></div><div><p class="text-sm text-slate-500 font-medium">Pending Approval</p><p id="stat-pending-reviews" class="text-3xl font-bold">0</p></div></div></div><div class="bg-white rounded-xl shadow-md border overflow-hidden"><h2 class="text-xl font-semibold p-6 border-b">Manage Reviews</h2><div class="overflow-x-auto"><table class="admin-table w-full text-sm text-left"><thead class="text-xs uppercase"><tr><th class="px-6 py-3">#</th><th class="px-6 py-3">Reviewer</th><th class="px-6 py-3">Band / Venue</th><th class="px-6 py-3">Rating</th><th class="px-6 py-3">Review</th><th class="px-6 py-3 text-center">Status</th><th class="px-6 py-3 text-center">Actions</th></tr></thead><tbody id="reviews-table-body"></tbody></table><div id="no-reviews-message" class="text-center py-12 px-6"><p class="text-slate-500">Loading Reviews...</p></div></div></div></div>
             <div id="gigs-content" class="hidden"><div class="flex justify-between items-center mb-8"><h1 class="text-3xl font-bold text-slate-900">Gigs Management</h1><button id="add-gig-btn" class="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 flex items-center gap-2"><i class="fas fa-plus"></i> Add Gig</button></div><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8"><div class="bg-white p-6 rounded-xl shadow-md border flex items-center"><div class="p-4 bg-purple-100 text-purple-600 rounded-full mr-4"><i class="fas fa-guitar fa-2x"></i></div><div><p class="text-sm text-slate-500 font-medium">Total Gigs</p><p id="stat-total-gigs" class="text-3xl font-bold">0</p></div></div><div class="bg-white p-6 rounded-xl shadow-md border flex items-center"><div class="p-4 bg-cyan-100 text-cyan-600 rounded-full mr-4"><i class="fas fa-calendar-alt fa-2x"></i></div><div><p class="text-sm text-slate-500 font-medium">Upcoming Gigs</p><p id="stat-upcoming-gigs" class="text-3xl font-bold">0</p></div></div><div class="bg-white p-6 rounded-xl shadow-md border flex items-center"><div class="p-4 bg-orange-100 text-orange-600 rounded-full mr-4"><i class="fas fa-history fa-2x"></i></div><div><p class="text-sm text-slate-500 font-medium">Past Gigs</p><p id="stat-past-gigs" class="text-3xl font-bold">0</p></div></div></div><div class="bg-white rounded-xl shadow-md border overflow-hidden"><h2 class="text-xl font-semibold p-6 border-b">Manage Gigs</h2><div class="overflow-x-auto"><table class="admin-table w-full text-sm text-left"><thead class="text-xs uppercase"><tr><th class="px-6 py-3">#</th><th class="px-6 py-3">Date & Time</th><th class="px-6 py-3">Band Name</th><th class="px-6 py-3">Venue Name</th><th class="px-6 py-3">Address</th><th class="px-6 py-3 text-center">Actions</th></tr></thead><tbody id="gigs-table-body"></tbody></table><div id="no-gigs-message" class="text-center py-12 px-6"><p class="text-slate-500">Loading Gigs...</p></div></div></div></div>
         </main>
@@ -91,15 +123,87 @@ document.addEventListener('DOMContentLoaded', () => {
     const showCustomAlert=(m,type='info')=>{const t=document.createElement("div");t.className=`custom-alert-box alert-${type}`,t.textContent=m,customAlertContainer.innerHTML="",customAlertContainer.appendChild(t),setTimeout(()=>{t.classList.add("fade-out"),t.addEventListener("animationend",()=>t.remove())},3e3)};
     const showTab=t=>{Object.values(contentAreas).forEach(a=>a&&a.classList.add("hidden")),Object.values(navLinks).forEach(l=>l.classList.remove("active")),contentAreas[t]&&navLinks[t]?(contentAreas[t].classList.remove("hidden"),navLinks[t].classList.add("active")):(contentAreas.dashboard.classList.remove("hidden"),navLinks.dashboard.classList.add("active"))};
     const normalizeDate=e=>{if(!e)return"";const t=new Date(e);return isNaN(t.getTime())?"":`${t.getUTCFullYear()}-${String(t.getUTCMonth()+1).padStart(2,"0")}-${String(t.getUTCDate()).padStart(2,"0")}`};
+    
+    // ========== NEW: Time Formatting Helper ==========
+    const formatTimeDisplay = timeStr => {
+        if (!timeStr) return "";
+        // Removes the seconds part (e.g., :00) from a time string like "7:30:00 PM"
+        return timeStr.replace(/:\d{2}\s/, ' ');
+    };
+    // ===============================================
+
     const parseTime=e=>{if(!e)return{hour:"",minutes:"",ampm:"AM"};const t=e.match(/(\d{1,2}):(\d{2})\s*(AM|PM)/i);return t?{hour:t[1],minutes:t[2],ampm:t[3].toUpperCase()}:{hour:"",minutes:"",ampm:"AM"}};
     const showConfirm=(t,m)=>{confirmTitle.textContent=t;confirmMessage.textContent=m;confirmModalContainer.classList.remove('hidden');return new Promise((resolve,reject)=>{confirmOkBtn.onclick=()=>{confirmModalContainer.classList.add('hidden');resolve();};confirmCancelBtn.onclick=()=>{confirmModalContainer.classList.add('hidden');reject();};})};
+    
+    const updateDashboard = () => {
+        const pendingReviewsCount = allReviews.filter(r => !r.isApproved).length;
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const upcomingGigsCount = allGigs.filter(g => new Date(normalizeDate(g.date)) >= today).length;
+
+        document.getElementById('dashboard-stat-upcoming').textContent = upcomingGigsCount;
+        document.getElementById('dashboard-stat-pending').textContent = pendingReviewsCount;
+        document.getElementById('dashboard-stat-total-gigs').textContent = allGigs.length;
+        document.getElementById('dashboard-stat-total-reviews').textContent = allReviews.length;
+
+        const upcomingGigsContainer = document.getElementById('dashboard-upcoming-gigs');
+        upcomingGigsContainer.innerHTML = '';
+        const upcomingGigs = allGigs
+            .filter(g => new Date(normalizeDate(g.date)) >= today)
+            .sort((a, b) => new Date(normalizeDate(a.date)) - new Date(normalizeDate(b.date)))
+            .slice(0, 5);
+
+        if (upcomingGigs.length > 0) {
+            upcomingGigs.forEach(gig => {
+                const gigEl = document.createElement('div');
+                gigEl.className = 'flex items-center justify-between p-3 rounded-lg hover:bg-slate-50';
+                gigEl.innerHTML = `
+                    <div>
+                        <p class="font-semibold text-slate-800">${gig.name}</p>
+                        <p class="text-sm text-slate-500">${gig.venueName || 'N/A'}</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="font-medium text-slate-700">${gig.date}</p>
+                        <p class="text-sm text-slate-500">${formatTimeDisplay(gig.time)}</p>
+                    </div>
+                `;
+                upcomingGigsContainer.appendChild(gigEl);
+            });
+        } else {
+            upcomingGigsContainer.innerHTML = '<p class="text-slate-500 text-center py-8">No upcoming gigs found.</p>';
+        }
+
+        const pendingReviewsContainer = document.getElementById('dashboard-pending-reviews');
+        pendingReviewsContainer.innerHTML = '';
+        const pendingReviews = allReviews.filter(r => !r.isApproved).slice(0, 5);
+
+        if (pendingReviews.length > 0) {
+            pendingReviews.forEach(review => {
+                const reviewEl = document.createElement('div');
+                reviewEl.className = 'p-3 rounded-lg hover:bg-slate-50';
+                reviewEl.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="font-semibold text-slate-800">${review.name}</p>
+                            <p class="text-sm text-slate-500">${review.gigName}</p>
+                        </div>
+                        <div class="flex">${Array.from({ length: 5 }, (v, i) => `<i class="fa-solid fa-star ${i < review.rating ? 'text-amber-400' : 'text-slate-300'}"></i>`).join('')}</div>
+                    </div>
+                `;
+                pendingReviewsContainer.appendChild(reviewEl);
+            });
+        } else {
+            pendingReviewsContainer.innerHTML = '<p class="text-slate-500 text-center py-8">No pending reviews.</p>';
+        }
+    };
+
     const populateStats=()=>{const e=allReviews.filter(e=>e.isApproved).length;document.getElementById("stat-total-reviews").textContent=allReviews.length,document.getElementById("stat-approved-reviews").textContent=e,document.getElementById("stat-pending-reviews").textContent=allReviews.length-e};
     const populateGigsStats=()=>{const e=new Date;e.setHours(0,0,0,0);let t=0,o=0;allGigs.forEach(s=>{const n=new Date(normalizeDate(s.date));n>=e?t++:o++}),document.getElementById("stat-total-gigs").textContent=allGigs.length,document.getElementById("stat-upcoming-gigs").textContent=t,document.getElementById("stat-past-gigs").textContent=o};
     const populateReviewsTable=()=>{reviewsTableBody.innerHTML="",allReviews.length?(noReviewsMessage.style.display="none",allReviews.forEach((e,t)=>{const o=document.createElement("tr");o.className="border-b",o.dataset.id=e.row;const s=e.isApproved?"bg-green-100 text-green-800":"bg-yellow-100 text-yellow-800",n=e.isApproved?"Approved":"Pending",a=e.isApproved?`<button class="unapprove-btn text-white bg-slate-500 hover:bg-slate-600 text-xs px-3 py-1.5 rounded-lg" title="Un-approve"><i class="fas fa-times"></i></button>`:`<button class="approve-btn text-white bg-green-500 hover:bg-green-600 text-xs px-3 py-1.5 rounded-lg" title="Approve"><i class="fas fa-check"></i></button>`;o.innerHTML=`<td class="px-6 py-4 font-medium text-slate-500">${t+1}</td><td class="px-6 py-4"><div class="font-medium">${e.name}</div><div class="text-slate-500">${e.hometown||"N/A"}</div></td><td class="px-6 py-4"><div class="font-medium">${e.gigName}</div><div class="text-slate-500">${e.gigVenue}</div></td><td class="px-6 py-4"><div class="flex">${Array.from({length:5},(t,o)=>`<i class="fa-solid fa-star ${o<e.rating?"text-amber-400":"text-slate-300"}"></i>`).join("")}</div></td><td class="px-6 py-4 max-w-xs truncate" title="${e.reviewText}">${e.reviewText}</td><td class="px-6 py-4 text-center"><span class="status-badge text-xs px-2.5 py-0.5 rounded-full ${s}">${n}</span></td><td class="px-6 py-4 text-center"><div class="flex items-center justify-center gap-2">${a}<button class="delete-btn text-white bg-red-500 hover:bg-red-600 text-xs px-3 py-1.5 rounded-lg" title="Delete"><i class="fas fa-trash"></i></button></div></td>`,reviewsTableBody.appendChild(o)})):(noReviewsMessage.style.display="block",noReviewsMessage.querySelector("p").textContent="No reviews found.")};
-    const populateGigsTable=()=>{gigsTableBody.innerHTML="",allGigs.length?(noGigsMessage.style.display="none",allGigs.forEach((e,t)=>{const o=document.createElement("tr");o.className="border-b",o.dataset.rowId=e.row,o.innerHTML=`<td class="px-6 py-4 font-medium text-slate-500">${t+1}</td><td class="px-6 py-4"><div>${e.date}</div><div class="text-sm text-slate-500">${e.time}</div></td><td class="px-6 py-4 font-medium">${e.name}</td><td class="px-6 py-4">${e.venueName}</td><td class="px-6 py-4">${e.address}</td><td class="px-6 py-4 text-center"><div class="flex items-center justify-center gap-2"><button class="edit-gig-btn text-white bg-blue-500 hover:bg-blue-600 text-xs px-3 py-1.5 rounded-lg" title="Edit"><i class="fas fa-pencil-alt"></i></button><button class="delete-gig-btn text-white bg-red-500 hover:bg-red-600 text-xs px-3 py-1.5 rounded-lg" title="Delete"><i class="fas fa-trash"></i></button></div></td>`,gigsTableBody.appendChild(o)})):(noGigsMessage.style.display="block",noGigsMessage.querySelector("p").textContent="No gigs found.")};
-    const loadAppData=async()=>{showLoading(!0);try{const e=await fetch(`${APPS_SCRIPT_URL}?action=getReviews`);if(!e.ok)throw new Error("Could not fetch reviews");const t=await e.json();if(!Array.isArray(t))throw new Error(t.message||"Invalid review data");allReviews=t,populateReviewsTable(),populateStats(),Papa.parse(GIG_LIST_CSV_URL,{download:!0,header:!0,transformHeader:e=>e.trim().toLowerCase(),complete:e=>{allGigs=e.data.map((e,t)=>({row:t+2,name:e.name||"",bandWebsite:e["band website"]||"",bandEmail:e["band email"]||"",venueName:e["venue name"]||"",address:e.address||"",venueWebsite:e["venue website"]||"",venuePhone:e["venue phone number"]||"",venueEmail:e["venue email"]||"",date:e.date||"",time:e.time||"",googleMapsLink:e["google maps link"]||""})).filter(e=>e.name),populateGigsTable(),populateGigsStats()},error:e=>{console.error("PapaParse Error:",e),showCustomAlert("Failed to load Gigs CSV.","error")}}) }catch(e){console.error("Error:",e),showCustomAlert(`Error: ${e.message}`,"error")}finally{showLoading(!1)}};
+    const populateGigsTable=()=>{gigsTableBody.innerHTML="",allGigs.length?(noGigsMessage.style.display="none",allGigs.forEach((e,t)=>{const o=document.createElement("tr");o.className="border-b",o.dataset.rowId=e.row,o.innerHTML=`<td class="px-6 py-4 font-medium text-slate-500">${t+1}</td><td class="px-6 py-4"><div>${e.date}</div><div class="text-sm text-slate-500">${formatTimeDisplay(e.time)}</div></td><td class="px-6 py-4 font-medium">${e.name}</td><td class="px-6 py-4">${e.venueName}</td><td class="px-6 py-4">${e.address}</td><td class="px-6 py-4 text-center"><div class="flex items-center justify-center gap-2"><button class="edit-gig-btn text-white bg-blue-500 hover:bg-blue-600 text-xs px-3 py-1.5 rounded-lg" title="Edit"><i class="fas fa-pencil-alt"></i></button><button class="delete-gig-btn text-white bg-red-500 hover:bg-red-600 text-xs px-3 py-1.5 rounded-lg" title="Delete"><i class="fas fa-trash"></i></button></div></td>`,gigsTableBody.appendChild(o)})):(noGigsMessage.style.display="block",noGigsMessage.querySelector("p").textContent="No gigs found.")};
+    const loadAppData=async()=>{showLoading(!0);try{const e=await fetch(`${APPS_SCRIPT_URL}?action=getReviews`);if(!e.ok)throw new Error("Could not fetch reviews");const t=await e.json();if(!Array.isArray(t))throw new Error(t.message||"Invalid review data");allReviews=t,populateReviewsTable(),populateStats(),Papa.parse(GIG_LIST_CSV_URL,{download:!0,header:!0,transformHeader:e=>e.trim().toLowerCase(),complete:e=>{allGigs=e.data.map((e,t)=>({row:t+2,name:e.name||"",bandWebsite:e["band website"]||"",bandEmail:e["band email"]||"",venueName:e["venue name"]||"",address:e.address||"",venueWebsite:e["venue website"]||"",venuePhone:e["venue phone number"]||"",venueEmail:e["venue email"]||"",date:e.date||"",time:e.time||"",googleMapsLink:e["google maps link"]||""})).filter(e=>e.name),populateGigsTable(),populateGigsStats(),updateDashboard()},error:e=>{console.error("PapaParse Error:",e),showCustomAlert("Failed to load Gigs CSV.","error")}}) }catch(e){console.error("Error:",e),showCustomAlert(`Error: ${e.message}`,"error")}finally{showLoading(!1)}};
     
-    const handleAction=async(action,rowId,button,type)=>{const icon=button.querySelector("i"),originalIconClass=icon.className;icon.className="fas fa-spinner btn-spinner",button.disabled=!0;try{const formData=new FormData;formData.append("action",action),formData.append("rowId",rowId);const response=await fetch(APPS_SCRIPT_URL,{method:"POST",body:formData});if(!response.ok)throw new Error("Server error");const result=await response.json();if("success"!==result.status)throw new Error(result.message);if("deleteReview"===action||"deleteGig"===action){showCustomAlert(`${type} permanently deleted!`,"success"),"Review"===type?(allReviews=allReviews.filter(review=>review.row!=rowId),populateReviewsTable(),populateStats()):(allGigs=allGigs.filter(gig=>gig.row!=rowId),populateGigsTable(),populateGigsStats())}else{const reviewToUpdate=allReviews.find(review=>review.row==rowId);if(reviewToUpdate)reviewToUpdate.isApproved="approveReview"===action,showCustomAlert(reviewToUpdate.isApproved?"Review approved!":"Review un-approved.","success"),populateReviewsTable(),populateStats();else throw new Error("Review not found for update.")}}catch(e){showCustomAlert(`Error: ${e.message}`,"error"),icon.className=originalIconClass}finally{button.disabled=!1}};
+    const handleAction=async(action,rowId,button,type)=>{const icon=button.querySelector("i"),originalIconClass=icon.className;icon.className="fas fa-spinner btn-spinner",button.disabled=!0;try{const formData=new FormData;formData.append("action",action),formData.append("rowId",rowId);const response=await fetch(APPS_SCRIPT_URL,{method:"POST",body:formData});if(!response.ok)throw new Error("Server error");const result=await response.json();if("success"!==result.status)throw new Error(result.message);if("deleteReview"===action||"deleteGig"===action){showCustomAlert(`${type} permanently deleted!`,"success"),"Review"===type?(allReviews=allReviews.filter(review=>review.row!=rowId),populateReviewsTable(),populateStats()):(allGigs=allGigs.filter(gig=>gig.row!=rowId),populateGigsTable(),populateGigsStats())}else{const reviewToUpdate=allReviews.find(review=>review.row==rowId);if(reviewToUpdate)reviewToUpdate.isApproved="approveReview"===action,showCustomAlert(reviewToUpdate.isApproved?"Review approved!":"Review un-approved.","success"),populateReviewsTable(),populateStats();else throw new Error("Review not found for update.")}}catch(e){showCustomAlert(`Error: ${e.message}`,"error"),icon.className=originalIconClass}finally{button.disabled=!1, updateDashboard()}};
 
     const submitGigForm = async e => {
         e.preventDefault();
@@ -130,13 +234,11 @@ document.addEventListener('DOMContentLoaded', () => {
             (isAddMode ? addGigModal : editGigModal).classList.add('hidden');
 
             if (isAddMode) {
-                // INSTANT ADD: Use the data returned from the server
                 const newGig = result.newGig;
                 const dateParts = newGig.date.split('-');
                 newGig.date = `${dateParts[1]}/${dateParts[2]}/${dateParts[0]}`;
                 allGigs.push(newGig);
             } else {
-                // INSTANT EDIT: Update the existing local data
                 const updatedRowId = form.elements.rowId.value;
                 const gigToUpdate = allGigs.find(gig => gig.row == updatedRowId);
                 if (gigToUpdate) {
@@ -154,9 +256,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
             
-            // Redraw the table and stats in both cases
             populateGigsTable();
             populateGigsStats();
+            updateDashboard();
 
         } catch (error) {
             showCustomAlert(`Error: ${error.message}`, "error");
@@ -175,8 +277,10 @@ document.addEventListener('DOMContentLoaded', () => {
     editGigForm.addEventListener("submit",submitGigForm);
     document.querySelectorAll('.modal-close-btn, .modal-cancel-btn').forEach(b=>b.addEventListener('click',()=>b.closest('.fixed').classList.add('hidden')));
     Object.keys(navLinks).forEach(t=>{navLinks[t]&&navLinks[t].addEventListener("click",e=>{e.preventDefault(),showTab(t)})});
-    navLinks.reviews.addEventListener("click",e=>{e.preventDefault(),showTab("reviews"),populateStats()});
-    navLinks.gigs.addEventListener("click",e=>{e.preventDefault(),showTab("gigs"),populateGigsStats()});
+    
+    document.getElementById('dashboard-view-gigs-btn').addEventListener('click', () => showTab('gigs'));
+    document.getElementById('dashboard-view-reviews-btn').addEventListener('click', () => showTab('reviews'));
+    
     showTab('dashboard');
 });
 </script>
