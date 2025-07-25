@@ -23,186 +23,95 @@
         .sidebar-link.active { font-weight: 600; border-right: 3px solid #4f46e5; }
         .admin-table th { background-color: #f8fafc; font-weight: 600; color: #475569; }
         .admin-table tr:hover { background-color: #f1f5f9; }
-        #customAlert { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 9999; pointer-events: none; }
-        .custom-alert-box { background: linear-gradient(135deg, #3b82f6, #6366f1); color: white; padding: 1rem 1.5rem; border-radius: 0.75rem; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); font-weight: 500; opacity: 0; animation: slideDownFadeIn 0.4s ease-out forwards; }
-        .custom-alert-box.fade-out { animation: slideUpFadeOut 0.4s ease-in forwards; }
         #loadingOverlay { position: fixed; inset: 0; background: rgba(249,249,249,0.85); backdrop-filter: blur(5px); z-index: 30000; display: flex; justify-content: center; align-items: center; transition: opacity 0.5s ease; }
         .btn-spinner { animation: spin 1s linear infinite; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        
+        /* --- Custom Alert & Confirmation Styles (CORRECTED) --- */
+        /* This rule now correctly targets only the top banner alerts */
+        #customAlert-container {
+            position: fixed; top: 0; left: 0; right: 0;
+            display: flex; align-items: flex-start; justify-content: center;
+            padding-top: 20px; z-index: 9999; pointer-events: none;
+        }
+        .custom-alert-box {
+            color: white; padding: 1rem 1.5rem; border-radius: 0.75rem;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); font-weight: 500;
+            opacity: 0; animation: slideDownFadeIn 0.4s ease-out forwards;
+        }
+        .custom-alert-box.fade-out { animation: slideUpFadeOut 0.4s ease-in forwards; }
+        .alert-info { background: linear-gradient(135deg, #3b82f6, #6366f1); }
+        .alert-success { background: linear-gradient(135deg, #22c55e, #16a34a); }
+        .alert-error { background: linear-gradient(135deg, #ef4444, #dc2626); }
+
+        .confirm-modal {
+            max-width: 400px; width: 100%;
+            background: white; border-radius: 0.75rem; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+            text-align: center; padding: 2rem;
+            opacity: 0; animation: popIn 0.3s ease-out forwards;
+        }
+        @keyframes popIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; }}
         @keyframes slideDownFadeIn { from { transform: translateY(-30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         @keyframes slideUpFadeOut { from { transform: translateY(0); opacity: 1; } to { transform: translateY(-30px); opacity: 0; } }
-        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800">
 
-    <div id="password-overlay" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center">
-        <div class="w-full max-w-md bg-white rounded-xl shadow-2xl p-8">
-            <form id="password-form">
-                <h2 class="text-2xl font-bold text-slate-800 text-center mb-2">Admin Access</h2>
-                <p class="text-slate-500 text-center mb-6">Please enter the password to continue.</p>
-                <div class="space-y-4">
-                    <input type="password" id="password-input" placeholder="Password" class="w-full px-4 py-3 bg-slate-100 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                    <button type="submit" id="login-button" class="w-full py-3 px-5 bg-gradient-to-br from-blue-500 to-indigo-600 text-white font-semibold rounded-lg shadow-md hover:from-blue-600 hover:to-indigo-700">Login</button>
-                </div>
-                <p id="password-error" class="text-red-500 text-sm text-center mt-4 h-4"></p>
-            </form>
-        </div>
-    </div>
+    <div id="password-overlay" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center"><div class="w-full max-w-md bg-white rounded-xl shadow-2xl p-8"><form id="password-form"><h2 class="text-2xl font-bold text-slate-800 text-center mb-2">Admin Access</h2><p class="text-slate-500 text-center mb-6">Please enter the password to continue.</p><div class="space-y-4"><input type="password" id="password-input" placeholder="Password" class="w-full px-4 py-3 bg-slate-100 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"><button type="submit" id="login-button" class="w-full py-3 px-5 bg-gradient-to-br from-blue-500 to-indigo-600 text-white font-semibold rounded-lg shadow-md hover:from-blue-600 hover:to-indigo-700">Login</button></div><p id="password-error" class="text-red-500 text-sm text-center mt-4 h-4"></p></form></div></div>
 
     <div class="flex h-screen bg-slate-100">
-        <aside class="w-64 bg-white border-r border-slate-200 flex-shrink-0">
-            <div class="p-6 text-center border-b"><h1 class="text-2xl font-extrabold text-indigo-600 tracking-wider">ADMIN</h1></div>
-            <nav class="mt-6">
-                <a id="nav-dashboard" class="sidebar-link flex items-center px-6 py-3 text-slate-700"><i class="fas fa-tachometer-alt w-6 mr-4"></i> Dashboard</a>
-                <a id="nav-reviews" class="sidebar-link flex items-center px-6 py-3 text-slate-700"><i class="fas fa-star w-6 mr-4"></i> Reviews</a>
-                <a id="nav-gigs" class="sidebar-link flex items-center px-6 py-3 text-slate-700"><i class="fas fa-guitar w-6 mr-4"></i> Gigs</a>
-                <a id="nav-users" class="sidebar-link flex items-center px-6 py-3 text-slate-700"><i class="fas fa-users w-6 mr-4"></i> Users</a>
-                <a id="nav-settings" class="sidebar-link flex items-center px-6 py-3 text-slate-700"><i class="fas fa-cog w-6 mr-4"></i> Settings</a>
-            </nav>
-        </aside>
+        <aside class="w-64 bg-white border-r border-slate-200 flex-shrink-0"><div class="p-6 text-center border-b"><h1 class="text-2xl font-extrabold text-indigo-600 tracking-wider">ADMIN</h1></div><nav class="mt-6"><a id="nav-dashboard" class="sidebar-link flex items-center px-6 py-3 text-slate-700"><i class="fas fa-tachometer-alt w-6 mr-4"></i> Dashboard</a><a id="nav-reviews" class="sidebar-link flex items-center px-6 py-3 text-slate-700"><i class="fas fa-star w-6 mr-4"></i> Reviews</a><a id="nav-gigs" class="sidebar-link flex items-center px-6 py-3 text-slate-700"><i class="fas fa-guitar w-6 mr-4"></i> Gigs</a><a id="nav-users" class="sidebar-link flex items-center px-6 py-3 text-slate-700"><i class="fas fa-users w-6 mr-4"></i> Users</a><a id="nav-settings" class="sidebar-link flex items-center px-6 py-3 text-slate-700"><i class="fas fa-cog w-6 mr-4"></i> Settings</a></nav></aside>
 
         <main class="flex-1 p-8 overflow-y-auto">
             <div id="dashboard-content"><h1 class="text-3xl font-bold text-slate-900 mb-4">Dashboard</h1><p class="text-slate-600">Welcome to the admin panel. Select a tab from the sidebar to get started.</p></div>
-            <div id="reviews-content" class="hidden">
-                <h1 class="text-3xl font-bold text-slate-900 mb-8">Reviews Management</h1>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-                    <div class="bg-white p-6 rounded-xl shadow-md border flex items-center"><div class="p-4 bg-blue-100 text-blue-600 rounded-full mr-4"><i class="fas fa-star fa-2x"></i></div><div><p class="text-sm text-slate-500 font-medium">Total Reviews</p><p id="stat-total-reviews" class="text-3xl font-bold">0</p></div></div>
-                    <div class="bg-white p-6 rounded-xl shadow-md border flex items-center"><div class="p-4 bg-green-100 text-green-600 rounded-full mr-4"><i class="fas fa-check-circle fa-2x"></i></div><div><p class="text-sm text-slate-500 font-medium">Approved Reviews</p><p id="stat-approved-reviews" class="text-3xl font-bold">0</p></div></div>
-                    <div class="bg-white p-6 rounded-xl shadow-md border flex items-center"><div class="p-4 bg-yellow-100 text-yellow-600 rounded-full mr-4"><i class="fas fa-hourglass-half fa-2x"></i></div><div><p class="text-sm text-slate-500 font-medium">Pending Approval</p><p id="stat-pending-reviews" class="text-3xl font-bold">0</p></div></div>
-                </div>
-                <div class="bg-white rounded-xl shadow-md border overflow-hidden"><h2 class="text-xl font-semibold p-6 border-b">Manage Reviews</h2><div class="overflow-x-auto"><table class="admin-table w-full text-sm text-left"><thead class="text-xs uppercase"><tr><th class="px-6 py-3">Reviewer</th><th class="px-6 py-3">Band / Venue</th><th class="px-6 py-3">Rating</th><th class="px-6 py-3">Review</th><th class="px-6 py-3 text-center">Status</th><th class="px-6 py-3 text-center">Actions</th></tr></thead><tbody id="reviews-table-body"></tbody></table><div id="no-reviews-message" class="text-center py-12 px-6"><p class="text-slate-500">Loading Reviews...</p></div></div></div>
-            </div>
-            <div id="gigs-content" class="hidden">
-                <h1 class="text-3xl font-bold text-slate-900 mb-8">Gigs Management</h1>
-                <div class="bg-white rounded-xl shadow-md border overflow-hidden"><h2 class="text-xl font-semibold p-6 border-b">Manage Gigs</h2><div class="overflow-x-auto"><table class="admin-table w-full text-sm text-left"><thead class="text-xs uppercase"><tr><th class="px-6 py-3">Date & Time</th><th class="px-6 py-3">Band Name</th><th class="px-6 py-3">Venue Name</th><th class="px-6 py-3">Address</th><th class="px-6 py-3 text-center">Actions</th></tr></thead><tbody id="gigs-table-body"></tbody></table><div id="no-gigs-message" class="text-center py-12 px-6"><p class="text-slate-500">Loading Gigs...</p></div></div></div>
-            </div>
+            <div id="reviews-content" class="hidden"><h1 class="text-3xl font-bold text-slate-900 mb-8">Reviews Management</h1><div class="bg-white rounded-xl shadow-md border overflow-hidden"><h2 class="text-xl font-semibold p-6 border-b">Manage Reviews</h2><div class="overflow-x-auto"><table class="admin-table w-full text-sm text-left"><thead class="text-xs uppercase"><tr><th class="px-6 py-3">#</th><th class="px-6 py-3">Reviewer</th><th class="px-6 py-3">Band / Venue</th><th class="px-6 py-3">Rating</th><th class="px-6 py-3">Review</th><th class="px-6 py-3 text-center">Status</th><th class="px-6 py-3 text-center">Actions</th></tr></thead><tbody id="reviews-table-body"></tbody></table><div id="no-reviews-message" class="text-center py-12 px-6"><p class="text-slate-500">Loading Reviews...</p></div></div></div></div>
+            <div id="gigs-content" class="hidden"><div class="flex justify-between items-center mb-8"><h1 class="text-3xl font-bold text-slate-900">Gigs Management</h1><button id="add-gig-btn" class="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 flex items-center gap-2"><i class="fas fa-plus"></i> Add Gig</button></div><div class="bg-white rounded-xl shadow-md border overflow-hidden"><h2 class="text-xl font-semibold p-6 border-b">Manage Gigs</h2><div class="overflow-x-auto"><table class="admin-table w-full text-sm text-left"><thead class="text-xs uppercase"><tr><th class="px-6 py-3">#</th><th class="px-6 py-3">Date & Time</th><th class="px-6 py-3">Band Name</th><th class="px-6 py-3">Venue Name</th><th class="px-6 py-3">Address</th><th class="px-6 py-3 text-center">Actions</th></tr></thead><tbody id="gigs-table-body"></tbody></table><div id="no-gigs-message" class="text-center py-12 px-6"><p class="text-slate-500">Loading Gigs...</p></div></div></div></div>
         </main>
     </div>
 
-    <div id="edit-gig-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center hidden">
-        <div class="w-full max-w-3xl bg-white rounded-xl shadow-2xl m-4"><div class="p-6 border-b flex justify-between items-center"><h2 class="text-2xl font-bold text-slate-800">Edit Gig</h2><button id="close-modal-btn" class="text-slate-400 hover:text-slate-600 text-2xl">&times;</button></div>
-            <form id="edit-gig-form" class="p-6">
-                <input type="hidden" id="edit-gig-row">
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <div><label for="edit-gig-date" class="text-sm font-medium">Date</label><input type="text" id="edit-gig-date" name="date" class="w-full mt-1 p-2 border rounded-md"></div>
-                    <div><label for="edit-gig-time" class="text-sm font-medium">Time</label><input type="text" id="edit-gig-time" name="time" class="w-full mt-1 p-2 border rounded-md"></div>
-                    <div><label for="edit-gig-name" class="text-sm font-medium">Band Name</label><input type="text" id="edit-gig-name" name="name" class="w-full mt-1 p-2 border rounded-md"></div>
-                    <div class="lg:col-span-3"><label for="edit-gig-address" class="text-sm font-medium">Address</label><input type="text" id="edit-gig-address" name="address" class="w-full mt-1 p-2 border rounded-md"></div>
-                    <div><label for="edit-gig-band-website" class="text-sm font-medium">Band Website</label><input type="url" id="edit-gig-band-website" name="band_website" class="w-full mt-1 p-2 border rounded-md"></div>
-                    <div><label for="edit-gig-band-email" class="text-sm font-medium">Band Email</label><input type="email" id="edit-gig-band-email" name="band_email" class="w-full mt-1 p-2 border rounded-md"></div>
-                    <div><label for="edit-gig-venue-name" class="text-sm font-medium">Venue Name</label><input type="text" id="edit-gig-venue-name" name="venue_name" class="w-full mt-1 p-2 border rounded-md"></div>
-                    <div><label for="edit-gig-venue-website" class="text-sm font-medium">Venue Website</label><input type="url" id="edit-gig-venue-website" name="venue_website" class="w-full mt-1 p-2 border rounded-md"></div>
-                    <div><label for="edit-gig-venue-phone" class="text-sm font-medium">Venue Phone</label><input type="tel" id="edit-gig-venue-phone" name="venue_phone_number" class="w-full mt-1 p-2 border rounded-md"></div>
-                    <div><label for="edit-gig-venue-email" class="text-sm font-medium">Venue Email</label><input type="email" id="edit-gig-venue-email" name="venue_email" class="w-full mt-1 p-2 border rounded-md"></div>
-                </div>
-                <div class="mt-6 flex justify-end gap-4"><button type="button" id="cancel-edit-btn" class="px-4 py-2 bg-slate-200 rounded-md">Cancel</button><button type="submit" id="save-gig-btn" class="px-4 py-2 bg-blue-600 text-white rounded-md">Save Changes</button></div>
-            </form>
-        </div>
-    </div>
+    <div id="edit-gig-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center hidden"><div class="w-full max-w-3xl bg-white rounded-xl shadow-2xl m-4"><div class="p-6 border-b flex justify-between items-center"><h2 class="text-2xl font-bold text-slate-800">Edit Gig</h2><button class="modal-close-btn text-slate-400 hover:text-slate-600 text-2xl">&times;</button></div><form id="edit-gig-form" class="p-6"><input type="hidden" name="rowId"><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"><div><label class="text-sm font-medium">Date</label><input type="date" name="date" class="w-full mt-1 p-2 border rounded-md"></div><div><label class="text-sm font-medium">Time</label><div class="flex items-center mt-1"><input type="text" name="hour" placeholder="H" maxlength="2" class="w-12 p-2 border rounded-md text-center"><span class="font-bold mx-1">:</span><input type="text" name="minutes" placeholder="MM" maxlength="2" class="w-16 p-2 border rounded-md text-center"><select name="ampm" class="ml-2 p-2 border rounded-md bg-white"><option>AM</option><option>PM</option></select></div></div><div><label class="text-sm font-medium">Band Name</label><input type="text" name="name" class="w-full mt-1 p-2 border rounded-md"></div><div class="lg:col-span-3"><label class="text-sm font-medium">Address</label><input type="text" name="address" class="w-full mt-1 p-2 border rounded-md"></div><div><label class="text-sm font-medium">Band Website</label><input type="url" name="band_website" class="w-full mt-1 p-2 border rounded-md"></div><div><label class="text-sm font-medium">Band Email</label><input type="email" name="band_email" class="w-full mt-1 p-2 border rounded-md"></div><div><label class="text-sm font-medium">Venue Name</label><input type="text" name="venue_name" class="w-full mt-1 p-2 border rounded-md"></div><div><label class="text-sm font-medium">Venue Website</label><input type="url" name="venue_website" class="w-full mt-1 p-2 border rounded-md"></div><div><label class="text-sm font-medium">Venue Phone</label><input type="tel" name="venue_phone_number" class="w-full mt-1 p-2 border rounded-md"></div><div><label class="text-sm font-medium">Venue Email</label><input type="email" name="venue_email" class="w-full mt-1 p-2 border rounded-md"></div></div><div class="mt-6 flex justify-end gap-4"><button type="button" class="modal-cancel-btn px-4 py-2 bg-slate-200 rounded-md">Cancel</button><button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md">Save Changes</button></div></form></div></div>
+    <div id="add-gig-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center hidden"><div class="w-full max-w-3xl bg-white rounded-xl shadow-2xl m-4"><div class="p-6 border-b flex justify-between items-center"><h2 class="text-2xl font-bold text-slate-800">Add New Gig</h2><button class="modal-close-btn text-slate-400 hover:text-slate-600 text-2xl">&times;</button></div><form id="add-gig-form" class="p-6"><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"><div><label class="text-sm font-medium">Date</label><input type="date" name="date" class="w-full mt-1 p-2 border rounded-md"></div><div><label class="text-sm font-medium">Time</label><div class="flex items-center mt-1"><input type="text" name="hour" placeholder="H" maxlength="2" class="w-12 p-2 border rounded-md text-center"><span class="font-bold mx-1">:</span><input type="text" name="minutes" placeholder="MM" maxlength="2" class="w-16 p-2 border rounded-md text-center"><select name="ampm" class="ml-2 p-2 border rounded-md bg-white"><option>AM</option><option>PM</option></select></div></div><div><label class="text-sm font-medium">Band Name</label><input type="text" name="name" class="w-full mt-1 p-2 border rounded-md" required></div><div class="lg:col-span-3"><label class="text-sm font-medium">Address</label><input type="text" name="address" class="w-full mt-1 p-2 border rounded-md"></div><div><label class="text-sm font-medium">Band Website</label><input type="url" name="band_website" class="w-full mt-1 p-2 border rounded-md"></div><div><label class="text-sm font-medium">Band Email</label><input type="email" name="band_email" class="w-full mt-1 p-2 border rounded-md"></div><div><label class="text-sm font-medium">Venue Name</label><input type="text" name="venue_name" class="w-full mt-1 p-2 border rounded-md"></div><div><label class="text-sm font-medium">Venue Website</label><input type="url" name="venue_website" class="w-full mt-1 p-2 border rounded-md"></div><div><label class="text-sm font-medium">Venue Phone</label><input type="tel" name="venue_phone_number" class="w-full mt-1 p-2 border rounded-md"></div><div><label class="text-sm font-medium">Venue Email</label><input type="email" name="venue_email" class="w-full mt-1 p-2 border rounded-md"></div></div><div class="mt-6 flex justify-end gap-4"><button type="button" class="modal-cancel-btn px-4 py-2 bg-slate-200 rounded-md">Cancel</button><button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md">Add Gig</button></div></form></div></div>
+    <div id="confirm-modal-container" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-[60] flex items-center justify-center p-4 hidden"><div class="confirm-modal"><h3 id="confirm-title" class="text-lg font-bold text-slate-800">Are you sure?</h3><p id="confirm-message" class="text-slate-600 mt-2 mb-6">This action cannot be undone.</p><div class="flex justify-center gap-4"><button id="confirm-cancel-btn" class="px-6 py-2 bg-slate-200 text-slate-800 rounded-md font-semibold">Cancel</button><button id="confirm-ok-btn" class="px-6 py-2 bg-red-600 text-white rounded-md font-semibold">Delete</button></div></div></div>
 
-    <div id="customAlert"></div>
-    <div id="loadingOverlay" style="display: none;"><i class="fas fa-spinner fa-spin fa-3x text-indigo-600"></i></div>
+    <div id="customAlert-container"></div><div id="loadingOverlay" style="display: none;"><i class="fas fa-spinner fa-spin fa-3x text-indigo-600"></i></div>
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-    // --- CONFIGURATION ---
     const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxpSN5sKcgQMdnBnT-vn_Nyhs054N-O9Bch4NXV487Ml1xyYcmj-5n7QyRTwM3hbsoY/exec";
     const GIG_LIST_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRaeCIG4k0nRJAk-IQJRWr9OzkaKEVEWon5mdULnGEPhhW1AHzVo4oXB6eEuGvRRVSglpWg4em18Ri0/pub?gid=1813652457&single=true&output=csv";
-
-    // --- STATE & DOM ELEMENTS ---
     let allReviews = [], allGigs = [];
-    const passwordOverlay = document.getElementById('password-overlay'), passwordForm = document.getElementById('password-form'), passwordInput = document.getElementById('password-input'), passwordError = document.getElementById('password-error'), loginButton = document.getElementById('login-button');
-    const loadingOverlay = document.getElementById('loadingOverlay'), customAlert = document.getElementById('customAlert');
-    const reviewsTableBody = document.getElementById('reviews-table-body'), noReviewsMessage = document.getElementById('no-reviews-message');
-    const gigsTableBody = document.getElementById('gigs-table-body'), noGigsMessage = document.getElementById('no-gigs-message');
-    const navLinks = { dashboard: document.getElementById('nav-dashboard'), reviews: document.getElementById('nav-reviews'), gigs: document.getElementById('nav-gigs'), users: document.getElementById('nav-users'), settings: document.getElementById('nav-settings') };
-    const contentAreas = { dashboard: document.getElementById('dashboard-content'), reviews: document.getElementById('reviews-content'), gigs: document.getElementById('gigs-content') };
-    const editGigModal = document.getElementById('edit-gig-modal'), editGigForm = document.getElementById('edit-gig-form'), closeModalBtn = document.getElementById('close-modal-btn'), cancelEditBtn = document.getElementById('cancel-edit-btn');
+    const passwordOverlay=document.getElementById("password-overlay"),passwordForm=document.getElementById("password-form"),passwordInput=document.getElementById("password-input"),passwordError=document.getElementById("password-error"),loginButton=document.getElementById("login-button");
+    const loadingOverlay=document.getElementById("loadingOverlay"),customAlertContainer=document.getElementById("customAlert-container");
+    const reviewsTableBody=document.getElementById("reviews-table-body"),noReviewsMessage=document.getElementById("no-reviews-message");
+    const gigsTableBody=document.getElementById("gigs-table-body"),noGigsMessage=document.getElementById("no-gigs-message");
+    const navLinks={dashboard:document.getElementById("nav-dashboard"),reviews:document.getElementById("nav-reviews"),gigs:document.getElementById("nav-gigs"),users:document.getElementById("nav-users"),settings:document.getElementById("nav-settings")};
+    const contentAreas={dashboard:document.getElementById("dashboard-content"),reviews:document.getElementById("reviews-content"),gigs:document.getElementById("gigs-content")};
+    const editGigModal=document.getElementById("edit-gig-modal"),editGigForm=document.getElementById("edit-gig-form");
+    const addGigModal=document.getElementById("add-gig-modal"),addGigBtn=document.getElementById("add-gig-btn"),addGigForm=document.getElementById("add-gig-form");
+    const confirmModalContainer=document.getElementById('confirm-modal-container'),confirmTitle=document.getElementById('confirm-title'),confirmMessage=document.getElementById('confirm-message'),confirmOkBtn=document.getElementById('confirm-ok-btn'),confirmCancelBtn=document.getElementById('confirm-cancel-btn');
+    const showLoading=s=>{loadingOverlay.style.display=s?"flex":"none"};
+    const showCustomAlert=(m,type='info')=>{const t=document.createElement("div");t.className=`custom-alert-box alert-${type}`,t.textContent=m,customAlertContainer.innerHTML="",customAlertContainer.appendChild(t),setTimeout(()=>{t.classList.add("fade-out"),t.addEventListener("animationend",()=>t.remove())},3e3)};
+    const showTab=t=>{Object.values(contentAreas).forEach(a=>a&&a.classList.add("hidden")),Object.values(navLinks).forEach(l=>l.classList.remove("active")),contentAreas[t]&&navLinks[t]?(contentAreas[t].classList.remove("hidden"),navLinks[t].classList.add("active")):(contentAreas.dashboard.classList.remove("hidden"),navLinks.dashboard.classList.add("active"))};
+    const normalizeDate=e=>{if(!e)return"";const t=new Date(e);return isNaN(t.getTime())?"":`${t.getUTCFullYear()}-${String(t.getUTCMonth()+1).padStart(2,"0")}-${String(t.getUTCDate()).padStart(2,"0")}`};
+    const parseTime=e=>{if(!e)return{hour:"",minutes:"",ampm:"AM"};const t=e.match(/(\d{1,2}):(\d{2})\s*(AM|PM)/i);return t?{hour:t[1],minutes:t[2],ampm:t[3].toUpperCase()}:{hour:"",minutes:"",ampm:"AM"}};
+    const showConfirm=(t,m)=>{confirmTitle.textContent=t;confirmMessage.textContent=m;confirmModalContainer.classList.remove('hidden');return new Promise((resolve,reject)=>{confirmOkBtn.onclick=()=>{confirmModalContainer.classList.add('hidden');resolve();};confirmCancelBtn.onclick=()=>{confirmModalContainer.classList.add('hidden');reject();};})};
+    const populateStats=()=>{const e=allReviews.filter(e=>e.isApproved).length;document.getElementById("stat-total-reviews").textContent=allReviews.length,document.getElementById("stat-approved-reviews").textContent=e,document.getElementById("stat-pending-reviews").textContent=allReviews.length-e};
+    const populateReviewsTable=()=>{reviewsTableBody.innerHTML="",allReviews.length?(noReviewsMessage.style.display="none",allReviews.forEach((e,t)=>{const o=document.createElement("tr");o.className="border-b",o.dataset.id=e.row;const s=e.isApproved?"bg-green-100 text-green-800":"bg-yellow-100 text-yellow-800",n=e.isApproved?"Approved":"Pending",a=e.isApproved?`<button class="unapprove-btn text-white bg-slate-500 hover:bg-slate-600 text-xs px-3 py-1.5 rounded-lg" title="Un-approve"><i class="fas fa-times"></i></button>`:`<button class="approve-btn text-white bg-green-500 hover:bg-green-600 text-xs px-3 py-1.5 rounded-lg" title="Approve"><i class="fas fa-check"></i></button>`;o.innerHTML=`<td class="px-6 py-4 font-medium text-slate-500">${t+1}</td><td class="px-6 py-4"><div class="font-medium">${e.name}</div><div class="text-slate-500">${e.hometown||"N/A"}</div></td><td class="px-6 py-4"><div class="font-medium">${e.gigName}</div><div class="text-slate-500">${e.gigVenue}</div></td><td class="px-6 py-4"><div class="flex">${Array.from({length:5},(t,o)=>`<i class="fa-solid fa-star ${o<e.rating?"text-amber-400":"text-slate-300"}"></i>`).join("")}</div></td><td class="px-6 py-4 max-w-xs truncate" title="${e.reviewText}">${e.reviewText}</td><td class="px-6 py-4 text-center"><span class="status-badge text-xs px-2.5 py-0.5 rounded-full ${s}">${n}</span></td><td class="px-6 py-4 text-center"><div class="flex items-center justify-center gap-2">${a}<button class="delete-btn text-white bg-red-500 hover:bg-red-600 text-xs px-3 py-1.5 rounded-lg" title="Delete"><i class="fas fa-trash"></i></button></div></td>`,reviewsTableBody.appendChild(o)})):(noReviewsMessage.style.display="block",noReviewsMessage.querySelector("p").textContent="No reviews found.")};
+    const populateGigsTable=()=>{gigsTableBody.innerHTML="",allGigs.length?(noGigsMessage.style.display="none",allGigs.forEach((e,t)=>{const o=document.createElement("tr");o.className="border-b",o.dataset.rowId=e.row,o.innerHTML=`<td class="px-6 py-4 font-medium text-slate-500">${t+1}</td><td class="px-6 py-4"><div>${e.date}</div><div class="text-sm text-slate-500">${e.time}</div></td><td class="px-6 py-4 font-medium">${e.name}</td><td class="px-6 py-4">${e.venueName}</td><td class="px-6 py-4">${e.address}</td><td class="px-6 py-4 text-center"><div class="flex items-center justify-center gap-2"><button class="edit-gig-btn text-white bg-blue-500 hover:bg-blue-600 text-xs px-3 py-1.5 rounded-lg" title="Edit"><i class="fas fa-pencil-alt"></i></button><button class="delete-gig-btn text-white bg-red-500 hover:bg-red-600 text-xs px-3 py-1.5 rounded-lg" title="Delete"><i class="fas fa-trash"></i></button></div></td>`,gigsTableBody.appendChild(o)})):(noGigsMessage.style.display="block",noGigsMessage.querySelector("p").textContent="No gigs found.")};
+    const loadAppData=async()=>{showLoading(!0);try{const e=await fetch(`${APPS_SCRIPT_URL}?action=getReviews`);if(!e.ok)throw new Error("Could not fetch reviews");const t=await e.json();if(!Array.isArray(t))throw new Error(t.message||"Invalid review data");allReviews=t,populateReviewsTable(),Papa.parse(GIG_LIST_CSV_URL,{download:!0,header:!0,transformHeader:e=>e.trim().toLowerCase(),complete:e=>{allGigs=e.data.map((e,t)=>({row:t+2,name:e.name||"",bandWebsite:e["band website"]||"",bandEmail:e["band email"]||"",venueName:e["venue name"]||"",address:e.address||"",venueWebsite:e["venue website"]||"",venuePhone:e["venue phone number"]||"",venueEmail:e["venue email"]||"",date:e.date||"",time:e.time||"",googleMapsLink:e["google maps link"]||""})).filter(e=>e.name),populateGigsTable()},error:e=>{console.error("PapaParse Error:",e),showCustomAlert("Failed to load Gigs CSV.","error")}}) }catch(e){console.error("Error:",e),showCustomAlert(`Error: ${e.message}`,"error")}finally{showLoading(!1)}};
+    const handleAction=async(e,t,o,s)=>{const n=o.querySelector("i"),a=n.className;n.className="fas fa-spinner btn-spinner",o.disabled=!0;try{const i=new FormData;i.append("action",e),i.append("rowId",t);const d=await fetch(APPS_SCRIPT_URL,{method:"POST",body:i});if(!d.ok)throw new Error("Server error");const l=await d.json();if("success"!==l.status)throw new Error(l.message);if("deleteReview"===e||"deleteGig"===e){showCustomAlert(`${s} permanently deleted!`,"success"),o.closest("tr").remove(),"Review"===s?(allReviews=allReviews.filter(e=>e.row!=t),populateStats()):allGigs=allGigs.filter(e=>e.row!=t)}else{const e=allReviews.find(o=>o.row==t);e.isApproved="approveReview"===action,showCustomAlert(e.isApproved?"Review approved!":"Review un-approved.","success"),populateReviewsTable(),populateStats()}}catch(e){showCustomAlert(`Error: ${e.message}`,"error"),n.className=a}finally{o.disabled=!1}};
+    const submitGigForm=async e=>{e.preventDefault();const t=e.target,o="add-gig-form"===t.id,s=t.querySelector('button[type="submit"]');s.disabled=!0,s.textContent=o?"Adding...":"Saving...";const n=new FormData;n.append("action",o?"addGig":"updateGig"),o||n.append("rowId",t.elements.rowId.value),n.append("date",t.elements.date.value),n.append("name",t.elements.name.value),n.append("address",t.elements.address.value),n.append("band_website",t.elements.band_website.value),n.append("band_email",t.elements.band_email.value),n.append("venue_name",t.elements.venue_name.value),n.append("venue_website",t.elements.venue_website.value),n.append("venue_phone_number",t.elements.venue_phone_number.value),n.append("venue_email",t.elements.venue_email.value);const a=`${t.elements.hour.value||"00"}:${t.elements.minutes.value||"00"} ${t.elements.ampm.value}`;n.append("time",a);try{const e=await fetch(APPS_SCRIPT_URL,{method:"POST",body:n});if(!e.ok)throw new Error("Server error");const i=await e.json();if("success"!==i.status)throw new Error(i.message);showCustomAlert(o?"Gig added successfully!":"Gig updated successfully!","success"),(o?addGigModal:editGigModal).classList.add("hidden"),await loadAppData()}catch(e){showCustomAlert(`Error: ${e.message}`,"error")}finally{s.disabled=!1,s.textContent=o?"Add Gig":"Save Changes"}};
     
-    // --- HELPER FUNCTIONS ---
-    const showLoading = s => { loadingOverlay.style.display = s ? 'flex' : 'none'; };
-    const showCustomAlert = (m, e=false) => { const a=document.createElement('div');a.className='custom-alert-box';if(e)a.style.background='linear-gradient(135deg,#ef4444,#dc2626)';a.textContent=m;customAlert.innerHTML='';customAlert.appendChild(a);setTimeout(() => { a.classList.add('fade-out'); a.addEventListener('animationend',()=>a.remove())},3000);};
-    const showTab = t => { Object.values(contentAreas).forEach(a=>a&&a.classList.add('hidden')); Object.values(navLinks).forEach(l=>l.classList.remove('active')); if(contentAreas[t]&&navLinks[t]){contentAreas[t].classList.remove('hidden');navLinks[t].classList.add('active');}else{contentAreas.dashboard.classList.remove('hidden');navLinks.dashboard.classList.add('active');}};
+    passwordForm.addEventListener("submit",async e=>{e.preventDefault(),passwordError.textContent="",loginButton.disabled=!0,loginButton.textContent="Verifying...";try{const t=new FormData;t.append("action","validatePassword"),t.append("password",passwordInput.value);const o=await fetch(APPS_SCRIPT_URL,{method:"POST",body:t});if(!o.ok)throw new Error("Network error");const s=await o.json();if("success"===s.status)passwordOverlay.style.transition="opacity 0.5s ease",passwordOverlay.style.opacity="0",setTimeout(()=>{passwordOverlay.style.display="none",loadAppData()},500);else throw new Error(s.message||"Incorrect password.")}catch(e){passwordError.textContent=e.message,loginButton.disabled=!1,loginButton.textContent="Login"}});
+    reviewsTableBody.addEventListener("click",async e=>{const t=e.target.closest("button");if(!t)return;const o=t.closest("tr").dataset.id;if(t.classList.contains("approve-btn"))handleAction("approveReview",o,t,"Review");else if(t.classList.contains("unapprove-btn"))handleAction("unapproveReview",o,t,"Review");else if(t.classList.contains("delete-btn"))try{const e=allReviews.find(e=>e.row==o).name;await showConfirm("Delete Review?",`Are you sure you want to permanently delete the review by ${e}?`),handleAction("deleteReview",o,t,"Review")}catch(e){}});
+    gigsTableBody.addEventListener("click",async e=>{const t=e.target.closest("button");if(!t)return;const o=t.closest("tr").dataset.rowId,s=allGigs.find(e=>e.row==o);if(t.classList.contains("edit-gig-btn")){const e=parseTime(s.time);editGigForm.elements.rowId.value=s.row,editGigForm.elements.date.value=normalizeDate(s.date),editGigForm.elements.hour.value=e.hour,editGigForm.elements.minutes.value=e.minutes,editGigForm.elements.ampm.value=e.ampm,editGigForm.elements.name.value=s.name,editGigForm.elements.address.value=s.address,editGigForm.elements.band_website.value=s.bandWebsite,editGigForm.elements.band_email.value=s.bandEmail,editGigForm.elements.venue_name.value=s.venueName,editGigForm.elements.venue_website.value=s.venueWebsite,editGigForm.elements.venue_phone_number.value=s.venuePhone,editGigForm.elements.venue_email.value=s.venueEmail,editGigModal.classList.remove("hidden")}else if(t.classList.contains("delete-gig-btn"))try{await showConfirm("Delete Gig?",`Are you sure you want to permanently delete the gig for ${s.name} on ${s.date}?`),handleAction("deleteGig",o,t,"Gig")}catch(e){}});
     
-    // --- CORE LOGIC ---
-    const populateStats = () => {const a=allReviews.filter(r=>r.isApproved).length;document.getElementById('stat-total-reviews').textContent=allReviews.length;document.getElementById('stat-approved-reviews').textContent=a;document.getElementById('stat-pending-reviews').textContent=allReviews.length-a;};
-    const populateReviewsTable = () => {
-        reviewsTableBody.innerHTML = ''; if (!allReviews.length) { noReviewsMessage.style.display = 'block'; noReviewsMessage.querySelector('p').textContent = 'No reviews found.'; return; }
-        noReviewsMessage.style.display = 'none';
-        allReviews.forEach(r=>{const t=document.createElement('tr');t.className='border-b';t.dataset.id=r.row;const s=r.isApproved?'bg-green-100 text-green-800':'bg-yellow-100 text-yellow-800',n=r.isApproved?'Approved':'Pending';const a=r.isApproved?`<button class="unapprove-btn text-white bg-slate-500 hover:bg-slate-600 text-xs px-3 py-1.5 rounded-lg" title="Un-approve"><i class="fas fa-times"></i></button>`:`<button class="approve-btn text-white bg-green-500 hover:bg-green-600 text-xs px-3 py-1.5 rounded-lg" title="Approve"><i class="fas fa-check"></i></button>`;t.innerHTML=`<td class="px-6 py-4"><div class="font-medium">${r.name}</div><div class="text-slate-500">${r.hometown||'N/A'}</div></td><td class="px-6 py-4"><div class="font-medium">${r.gigName}</div><div class="text-slate-500">${r.gigVenue}</div></td><td class="px-6 py-4"><div class="flex">${Array.from({length:5},(_,i)=>`<i class="fa-solid fa-star ${i<r.rating?'text-amber-400':'text-slate-300'}"></i>`).join('')}</div></td><td class="px-6 py-4 max-w-xs truncate" title="${r.reviewText}">${r.reviewText}</td><td class="px-6 py-4 text-center"><span class="status-badge text-xs px-2.5 py-0.5 rounded-full ${s}">${n}</span></td><td class="px-6 py-4 text-center">${a}<button class="delete-btn text-white bg-red-500 hover:bg-red-600 text-xs px-3 py-1.5 ml-2 rounded-lg" title="Delete"><i class="fas fa-trash"></i></button></td>`;reviewsTableBody.appendChild(t);});
-    };
-    const populateGigsTable = () => {
-        gigsTableBody.innerHTML = ''; if (!allGigs.length) { noGigsMessage.style.display = 'block'; noGigsMessage.querySelector('p').textContent = 'No gigs found.'; return; }
-        noGigsMessage.style.display = 'none';
-        allGigs.forEach(g => { const t=document.createElement('tr');t.className='border-b';t.dataset.rowId = g.row; t.innerHTML = `<td class="px-6 py-4"><div>${g.date}</div><div class="text-sm text-slate-500">${g.time}</div></td><td class="px-6 py-4 font-medium">${g.name}</td><td class="px-6 py-4">${g.venueName}</td><td class="px-6 py-4">${g.address}</td><td class="px-6 py-4 text-center"><button class="edit-gig-btn text-white bg-blue-500 hover:bg-blue-600 text-xs px-3 py-1.5 rounded-lg" title="Edit"><i class="fas fa-pencil-alt"></i></button></td>`; gigsTableBody.appendChild(t); });
-    };
-    const loadAppData = async () => {
-        showLoading(true);
-        try {
-            const r = await fetch(`${APPS_SCRIPT_URL}?action=getReviews`); if (!r.ok) throw new Error('Could not fetch reviews');
-            const d = await r.json(); if (!Array.isArray(d)) throw new Error(d.message || "Invalid review data");
-            allReviews = d; populateReviewsTable();
-            Papa.parse(GIG_LIST_CSV_URL, {
-                download: true, header: true, transformHeader: h => h.trim().toLowerCase(),
-                complete: res => { allGigs = res.data.map((row, i) => ({ row: i + 2, name: row.name || '', bandWebsite: row['band website'] || '', bandEmail: row['band email'] || '', venueName: row['venue name'] || '', address: row.address || '', venueWebsite: row['venue website'] || '', venuePhone: row['venue phone number'] || '', venueEmail: row['venue email'] || '', date: row.date || '', time: row.time || '', googleMapsLink: row['google maps link'] || '' })).filter(g => g.name); populateGigsTable(); },
-                error: err => { console.error("PapaParse Error:", err); showCustomAlert("Failed to load Gigs CSV.", true); }
-            });
-        } catch (e) { console.error("Error:", e); showCustomAlert(`Error: ${e.message}`, true);
-        } finally { showLoading(false); }
-    };
-    const handleReviewAction = async (action, rowId, button) => {
-        const icon = button.querySelector('i'); const originalIcon = icon.className; icon.className='fas fa-spinner btn-spinner'; button.disabled=true;
-        try {
-            const fd = new FormData(); fd.append('action', action); fd.append('rowId', rowId);
-            const res = await fetch(APPS_SCRIPT_URL, {method:'POST', body:fd}); if(!res.ok) throw new Error('Server error');
-            const result = await res.json(); if(result.status !== 'success') throw new Error(result.message);
-            if(action==='deleteReview'){showCustomAlert('Review permanently deleted!'); await loadAppData();}
-            else{const r = allReviews.find(rev=>rev.row==rowId); if(action==='approveReview'){r.isApproved=true;showCustomAlert('Review approved!');}else if(action==='unapproveReview'){r.isApproved=false;showCustomAlert('Review un-approved.');} populateReviewsTable(); populateStats();}
-        } catch (e) { showCustomAlert(`Error: ${e.message}`, true); icon.className = originalIcon; button.disabled = false; }
-    };
-    passwordForm.addEventListener('submit', async e => {
-        e.preventDefault(); passwordError.textContent = ''; loginButton.disabled = true; loginButton.textContent = 'Verifying...';
-        try {
-            const fd = new FormData(); fd.append('action', 'validatePassword'); fd.append('password', passwordInput.value);
-            const res = await fetch(APPS_SCRIPT_URL, {method:'POST', body:fd}); if (!res.ok) throw new Error('Network error');
-            const result = await res.json();
-            if (result.status === 'success') { passwordOverlay.style.transition='opacity 0.5s ease'; passwordOverlay.style.opacity='0'; setTimeout(() => { passwordOverlay.style.display='none'; loadAppData(); }, 500); }
-            else { throw new Error(result.message || 'Incorrect password.'); }
-        } catch (err) { passwordError.textContent = err.message; loginButton.disabled = false; loginButton.textContent = 'Login'; }
-    });
-    reviewsTableBody.addEventListener('click', e => {
-        const b = e.target.closest('button'); if (!b) return; const id = b.closest('tr').dataset.id;
-        if(b.classList.contains('approve-btn')) handleReviewAction('approveReview', id, b);
-        else if(b.classList.contains('unapprove-btn')) handleReviewAction('unapproveReview', id, b);
-        else if(b.classList.contains('delete-btn')) { if(confirm(`PERMANENTLY delete review by ${allReviews.find(r=>r.row==id).name}?`)) handleReviewAction('deleteReview', id, b); }
-    });
-    gigsTableBody.addEventListener('click', e => {
-        const b = e.target.closest('button.edit-gig-btn'); if (!b) return;
-        const id = b.closest('tr').dataset.rowId; const gig = allGigs.find(g => g.row == id);
-        if(gig) {
-            editGigForm.elements['edit-gig-row'].value = gig.row; editGigForm.elements['date'].value = gig.date;
-            editGigForm.elements['time'].value = gig.time; editGigForm.elements['name'].value = gig.name;
-            editGigForm.elements['address'].value = gig.address; editGigForm.elements['band_website'].value = gig.bandWebsite;
-            editGigForm.elements['band_email'].value = gig.bandEmail; editGigForm.elements['venue_name'].value = gig.venueName;
-            editGigForm.elements['venue_website'].value = gig.venueWebsite; editGigForm.elements['venue_phone_number'].value = gig.venuePhone;
-            editGigForm.elements['venue_email'].value = gig.venueEmail; editGigModal.classList.remove('hidden');
-        }
-    });
-    editGigForm.addEventListener('submit', async e => {
-        e.preventDefault(); const btn = document.getElementById('save-gig-btn'); btn.disabled=true; btn.textContent='Saving...';
-        const fd = new FormData(editGigForm); fd.append('action', 'updateGig'); fd.append('rowId', editGigForm.elements['edit-gig-row'].value);
-        try {
-            const res = await fetch(APPS_SCRIPT_URL, {method:'POST', body:fd}); if (!res.ok) throw new Error('Server error');
-            const result = await res.json(); if (result.status !== 'success') throw new Error(result.message);
-            showCustomAlert('Gig updated successfully!'); editGigModal.classList.add('hidden'); await loadAppData();
-        } catch (err) { showCustomAlert(`Error: ${err.message}`, true);
-        } finally { btn.disabled=false; btn.textContent='Save Changes'; }
-    });
-    closeModalBtn.addEventListener('click',()=>editGigModal.classList.add('hidden'));
-    cancelEditBtn.addEventListener('click',()=>editGigModal.classList.add('hidden'));
-    navLinks.dashboard.addEventListener('click', e => { e.preventDefault(); showTab('dashboard'); });
-    navLinks.reviews.addEventListener('click', e => { e.preventDefault(); showTab('reviews'); populateStats(); });
-    navLinks.gigs.addEventListener('click', e => { e.preventDefault(); showTab('gigs'); });
+    addGigBtn.addEventListener('click',()=>{addGigForm.reset();addGigModal.classList.remove('hidden')});
+    addGigForm.addEventListener("submit",submitGigForm);
+    editGigForm.addEventListener("submit",submitGigForm);
+    document.querySelectorAll('.modal-close-btn, .modal-cancel-btn').forEach(b=>b.addEventListener('click',()=>b.closest('.fixed').classList.add('hidden')));
+    Object.keys(navLinks).forEach(t=>{navLinks[t]&&navLinks[t].addEventListener("click",e=>{e.preventDefault(),showTab(t)})});
+    navLinks.reviews.addEventListener("click",e=>{e.preventDefault(),showTab("reviews"),populateStats()});
     showTab('dashboard');
 });
 </script>
