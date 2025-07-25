@@ -27,8 +27,6 @@
         .btn-spinner { animation: spin 1s linear infinite; }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         
-        /* --- Custom Alert & Confirmation Styles (CORRECTED) --- */
-        /* This rule now correctly targets only the top banner alerts */
         #customAlert-container {
             position: fixed; top: 0; left: 0; right: 0;
             display: flex; align-items: flex-start; justify-content: center;
@@ -44,8 +42,6 @@
         .alert-success { background: linear-gradient(135deg, #22c55e, #16a34a); }
         .alert-error { background: linear-gradient(135deg, #ef4444, #dc2626); }
 
-        /* The faulty rule for the confirmation modal has been removed. 
-           Its styling is now correctly handled by Tailwind CSS classes on the element itself. */
         .confirm-modal {
             max-width: 400px; width: 100%;
             background: white; border-radius: 0.75rem; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
@@ -102,21 +98,75 @@ document.addEventListener('DOMContentLoaded', () => {
     const populateReviewsTable=()=>{reviewsTableBody.innerHTML="",allReviews.length?(noReviewsMessage.style.display="none",allReviews.forEach((e,t)=>{const o=document.createElement("tr");o.className="border-b",o.dataset.id=e.row;const s=e.isApproved?"bg-green-100 text-green-800":"bg-yellow-100 text-yellow-800",n=e.isApproved?"Approved":"Pending",a=e.isApproved?`<button class="unapprove-btn text-white bg-slate-500 hover:bg-slate-600 text-xs px-3 py-1.5 rounded-lg" title="Un-approve"><i class="fas fa-times"></i></button>`:`<button class="approve-btn text-white bg-green-500 hover:bg-green-600 text-xs px-3 py-1.5 rounded-lg" title="Approve"><i class="fas fa-check"></i></button>`;o.innerHTML=`<td class="px-6 py-4 font-medium text-slate-500">${t+1}</td><td class="px-6 py-4"><div class="font-medium">${e.name}</div><div class="text-slate-500">${e.hometown||"N/A"}</div></td><td class="px-6 py-4"><div class="font-medium">${e.gigName}</div><div class="text-slate-500">${e.gigVenue}</div></td><td class="px-6 py-4"><div class="flex">${Array.from({length:5},(t,o)=>`<i class="fa-solid fa-star ${o<e.rating?"text-amber-400":"text-slate-300"}"></i>`).join("")}</div></td><td class="px-6 py-4 max-w-xs truncate" title="${e.reviewText}">${e.reviewText}</td><td class="px-6 py-4 text-center"><span class="status-badge text-xs px-2.5 py-0.5 rounded-full ${s}">${n}</span></td><td class="px-6 py-4 text-center"><div class="flex items-center justify-center gap-2">${a}<button class="delete-btn text-white bg-red-500 hover:bg-red-600 text-xs px-3 py-1.5 rounded-lg" title="Delete"><i class="fas fa-trash"></i></button></div></td>`,reviewsTableBody.appendChild(o)})):(noReviewsMessage.style.display="block",noReviewsMessage.querySelector("p").textContent="No reviews found.")};
     const populateGigsTable=()=>{gigsTableBody.innerHTML="",allGigs.length?(noGigsMessage.style.display="none",allGigs.forEach((e,t)=>{const o=document.createElement("tr");o.className="border-b",o.dataset.rowId=e.row,o.innerHTML=`<td class="px-6 py-4 font-medium text-slate-500">${t+1}</td><td class="px-6 py-4"><div>${e.date}</div><div class="text-sm text-slate-500">${e.time}</div></td><td class="px-6 py-4 font-medium">${e.name}</td><td class="px-6 py-4">${e.venueName}</td><td class="px-6 py-4">${e.address}</td><td class="px-6 py-4 text-center"><div class="flex items-center justify-center gap-2"><button class="edit-gig-btn text-white bg-blue-500 hover:bg-blue-600 text-xs px-3 py-1.5 rounded-lg" title="Edit"><i class="fas fa-pencil-alt"></i></button><button class="delete-gig-btn text-white bg-red-500 hover:bg-red-600 text-xs px-3 py-1.5 rounded-lg" title="Delete"><i class="fas fa-trash"></i></button></div></td>`,gigsTableBody.appendChild(o)})):(noGigsMessage.style.display="block",noGigsMessage.querySelector("p").textContent="No gigs found.")};
     const loadAppData=async()=>{showLoading(!0);try{const e=await fetch(`${APPS_SCRIPT_URL}?action=getReviews`);if(!e.ok)throw new Error("Could not fetch reviews");const t=await e.json();if(!Array.isArray(t))throw new Error(t.message||"Invalid review data");allReviews=t,populateReviewsTable(),populateStats(),Papa.parse(GIG_LIST_CSV_URL,{download:!0,header:!0,transformHeader:e=>e.trim().toLowerCase(),complete:e=>{allGigs=e.data.map((e,t)=>({row:t+2,name:e.name||"",bandWebsite:e["band website"]||"",bandEmail:e["band email"]||"",venueName:e["venue name"]||"",address:e.address||"",venueWebsite:e["venue website"]||"",venuePhone:e["venue phone number"]||"",venueEmail:e["venue email"]||"",date:e.date||"",time:e.time||"",googleMapsLink:e["google maps link"]||""})).filter(e=>e.name),populateGigsTable(),populateGigsStats()},error:e=>{console.error("PapaParse Error:",e),showCustomAlert("Failed to load Gigs CSV.","error")}}) }catch(e){console.error("Error:",e),showCustomAlert(`Error: ${e.message}`,"error")}finally{showLoading(!1)}};
-    const handleAction=async(e,t,o,s)=>{const n=o.querySelector("i"),a=n.className;n.className="fas fa-spinner btn-spinner",o.disabled=!0;try{const i=new FormData;i.append("action",e),i.append("rowId",t);const d=await fetch(APPS_SCRIPT_URL,{method:"POST",body:i});if(!d.ok)throw new Error("Server error");const l=await d.json();if("success"!==l.status)throw new Error(l.message);if("deleteReview"===e||"deleteGig"===e){showCustomAlert(`${s} permanently deleted!`, "success"),o.closest("tr").remove(),"Review"===s?(allReviews=allReviews.filter(e=>e.row!=t),populateStats()):(allGigs=allGigs.filter(e=>e.row!=t),populateGigsStats())}else{
-    // Fix starts here: Declare 'action' explicitly or use 'e' (the function parameter) directly
-    const reviewAction = e; // Use the 'e' parameter directly or assign to a new variable
-    const reviewToUpdate = allReviews.find(review => review.row == t);
-    if (reviewToUpdate) {
-        reviewToUpdate.isApproved = (reviewAction === "approveReview"); // Use reviewAction or e here
-        showCustomAlert(reviewToUpdate.isApproved ? "Review approved!" : "Review un-approved.", "success");
-        populateReviewsTable();
-        populateStats();
-    } else {
-        throw new Error("Review not found for update.");
-    }
-}
-}catch(e){showCustomAlert(`Error: ${e.message}`,"error"),n.className=a}finally{o.disabled=!1}};
-    const submitGigForm=async e=>{e.preventDefault();const t=e.target,o="add-gig-form"===t.id,s=t.querySelector('button[type="submit"]');s.disabled=!0,s.textContent=o?"Adding...":"Saving...";const n=new FormData;n.append("action",o?"addGig":"updateGig"),o||n.append("rowId",t.elements.rowId.value),n.append("date",t.elements.date.value),n.append("name",t.elements.name.value),n.append("address",t.elements.address.value),n.append("band_website",t.elements.band_website.value),n.append("band_email",t.elements.band_email.value),n.append("venue_name",t.elements.venue_name.value),n.append("venue_website",t.elements.venue_website.value),n.append("venue_phone_number",t.elements.venue_phone_number.value),n.append("venue_email",t.elements.venue_email.value);const a=`${t.elements.hour.value||"00"}:${t.elements.minutes.value||"00"} ${t.elements.ampm.value}`;n.append("time",a);try{const e=await fetch(APPS_SCRIPT_URL,{method:"POST",body:n});if(!e.ok)throw new Error("Server error");const i=await e.json();if("success"!==i.status)throw new Error(i.message);showCustomAlert(o?"Gig added successfully!":"Gig updated successfully!","success"),(o?addGigModal:editGigModal).classList.add("hidden"),await loadAppData()}catch(e){showCustomAlert(`Error: ${e.message}`,"error")}finally{s.disabled=!1,s.textContent=o?"Add Gig":"Save Changes"}};
+    
+    const handleAction=async(action,rowId,button,type)=>{const icon=button.querySelector("i"),originalIconClass=icon.className;icon.className="fas fa-spinner btn-spinner",button.disabled=!0;try{const formData=new FormData;formData.append("action",action),formData.append("rowId",rowId);const response=await fetch(APPS_SCRIPT_URL,{method:"POST",body:formData});if(!response.ok)throw new Error("Server error");const result=await response.json();if("success"!==result.status)throw new Error(result.message);if("deleteReview"===action||"deleteGig"===action){showCustomAlert(`${type} permanently deleted!`,"success"),"Review"===type?(allReviews=allReviews.filter(review=>review.row!=rowId),populateReviewsTable(),populateStats()):(allGigs=allGigs.filter(gig=>gig.row!=rowId),populateGigsTable(),populateGigsStats())}else{const reviewToUpdate=allReviews.find(review=>review.row==rowId);if(reviewToUpdate)reviewToUpdate.isApproved="approveReview"===action,showCustomAlert(reviewToUpdate.isApproved?"Review approved!":"Review un-approved.","success"),populateReviewsTable(),populateStats();else throw new Error("Review not found for update.")}}catch(e){showCustomAlert(`Error: ${e.message}`,"error"),icon.className=originalIconClass}finally{button.disabled=!1}};
+
+    const submitGigForm = async e => {
+        e.preventDefault();
+        const form = e.target;
+        const isAddMode = form.id === 'add-gig-form';
+        const submitBtn = form.querySelector('button[type="submit"]');
+        
+        submitBtn.disabled = true;
+        submitBtn.textContent = isAddMode ? "Adding..." : "Saving...";
+
+        const formData = new FormData(form);
+        formData.append("action", isAddMode ? "addGig" : "updateGig");
+        const time = `${form.elements.hour.value || "00"}:${form.elements.minutes.value || "00"} ${form.elements.ampm.value}`;
+        formData.append("time", time);
+
+        formData.delete('hour');
+        formData.delete('minutes');
+        formData.delete('ampm');
+
+        try {
+            const response = await fetch(APPS_SCRIPT_URL, { method: "POST", body: formData });
+            if (!response.ok) throw new Error("Server communication error.");
+            
+            const result = await response.json();
+            if (result.status !== 'success') throw new Error(result.message);
+
+            showCustomAlert(isAddMode ? "Gig added successfully!" : "Gig updated successfully!", "success");
+            (isAddMode ? addGigModal : editGigModal).classList.add('hidden');
+
+            if (isAddMode) {
+                // INSTANT ADD: Use the data returned from the server
+                const newGig = result.newGig;
+                const dateParts = newGig.date.split('-');
+                newGig.date = `${dateParts[1]}/${dateParts[2]}/${dateParts[0]}`;
+                allGigs.push(newGig);
+            } else {
+                // INSTANT EDIT: Update the existing local data
+                const updatedRowId = form.elements.rowId.value;
+                const gigToUpdate = allGigs.find(gig => gig.row == updatedRowId);
+                if (gigToUpdate) {
+                    const dateParts = form.elements.date.value.split('-');
+                    gigToUpdate.date = `${dateParts[1]}/${dateParts[2]}/${dateParts[0]}`;
+                    gigToUpdate.time = time;
+                    gigToUpdate.name = form.elements.name.value;
+                    gigToUpdate.address = form.elements.address.value;
+                    gigToUpdate.venueName = form.elements.venue_name.value;
+                    gigToUpdate.bandWebsite = form.elements.band_website.value;
+                    gigToUpdate.bandEmail = form.elements.band_email.value;
+                    gigToUpdate.venueWebsite = form.elements.venue_website.value;
+                    gigToUpdate.venuePhone = form.elements.venue_phone_number.value;
+                    gigToUpdate.venueEmail = form.elements.venue_email.value;
+                }
+            }
+            
+            // Redraw the table and stats in both cases
+            populateGigsTable();
+            populateGigsStats();
+
+        } catch (error) {
+            showCustomAlert(`Error: ${error.message}`, "error");
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = isAddMode ? "Add Gig" : "Save Changes";
+            if (isAddMode) form.reset();
+        }
+    };
+
     passwordForm.addEventListener("submit",async e=>{e.preventDefault(),passwordError.textContent="",loginButton.disabled=!0,loginButton.textContent="Verifying...";try{const t=new FormData;t.append("action","validatePassword"),t.append("password",passwordInput.value);const o=await fetch(APPS_SCRIPT_URL,{method:"POST",body:t});if(!o.ok)throw new Error("Network error");const s=await o.json();if("success"===s.status)passwordOverlay.style.transition="opacity 0.5s ease",passwordOverlay.style.opacity="0",setTimeout(()=>{passwordOverlay.style.display="none",loadAppData()},500);else throw new Error(s.message||"Incorrect password.")}catch(e){passwordError.textContent=e.message,loginButton.disabled=!1,loginButton.textContent="Login"}});
     reviewsTableBody.addEventListener("click",async e=>{const t=e.target.closest("button");if(!t)return;const o=t.closest("tr").dataset.id;if(t.classList.contains("approve-btn"))handleAction("approveReview",o,t,"Review");else if(t.classList.contains("unapprove-btn"))handleAction("unapproveReview",o,t,"Review");else if(t.classList.contains("delete-btn"))try{const e=allReviews.find(e=>e.row==o).name;await showConfirm("Delete Review?",`Are you sure you want to permanently delete the review by ${e}?`),handleAction("deleteReview",o,t,"Review")}catch(e){}});
     gigsTableBody.addEventListener("click",async e=>{const t=e.target.closest("button");if(!t)return;const o=t.closest("tr").dataset.rowId,s=allGigs.find(e=>e.row==o);if(t.classList.contains("edit-gig-btn")){const e=parseTime(s.time);editGigForm.elements.rowId.value=s.row,editGigForm.elements.date.value=normalizeDate(s.date),editGigForm.elements.hour.value=e.hour,editGigForm.elements.minutes.value=e.minutes,editGigForm.elements.ampm.value=e.ampm,editGigForm.elements.name.value=s.name,editGigForm.elements.address.value=s.address,editGigForm.elements.band_website.value=s.bandWebsite,editGigForm.elements.band_email.value=s.bandEmail,editGigForm.elements.venue_name.value=s.venueName,editGigForm.elements.venue_website.value=s.venueWebsite,editGigForm.elements.venue_phone_number.value=s.venuePhone,editGigForm.elements.venue_email.value=s.venueEmail,editGigModal.classList.remove("hidden")}else if(t.classList.contains("delete-gig-btn"))try{await showConfirm("Delete Gig?",`Are you sure you want to permanently delete the gig for ${s.name} on ${s.date}?`),handleAction("deleteGig",o,t,"Gig")}catch(e){}});
