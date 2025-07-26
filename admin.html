@@ -104,7 +104,7 @@
                 <h1 class="text-2xl sm:text-3xl font-bold text-slate-900">Gigs Management</h1>
                 <div class="flex items-center gap-2">
                     <button id="run-geolocation-btn" class="px-4 py-2 bg-amber-500 text-white font-semibold rounded-lg shadow-md hover:bg-amber-600 flex items-center justify-center gap-2">
-                        <i class="fas fa-map-marked-alt"></i> Run Geolocation
+                        <i class="fas fa-map-marked-alt"></i> Run Gig Geolocation
                     </button>
                     <button id="add-gig-btn" class="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 flex items-center justify-center gap-2">
                         <i class="fas fa-plus"></i> Add Gig
@@ -115,7 +115,17 @@
         </div>
 
         <div id="venues-content" class="hidden">
-            <div class="flex flex-col sm:flex-row justify-between sm:items-center mb-8 gap-4"><h1 class="text-2xl sm:text-3xl font-bold text-slate-900">Venues Management</h1><button id="add-venue-btn" class="px-4 py-2 bg-teal-600 text-white font-semibold rounded-lg shadow-md hover:bg-teal-700 flex items-center justify-center gap-2"><i class="fas fa-plus"></i> Add Venue</button></div>
+            <div class="flex flex-col sm:flex-row justify-between sm:items-center mb-8 gap-4">
+                <h1 class="text-2xl sm:text-3xl font-bold text-slate-900">Venues Management</h1>
+                <div class="flex items-center gap-2">
+                    <button id="run-venue-geolocation-btn" class="px-4 py-2 bg-amber-500 text-white font-semibold rounded-lg shadow-md hover:bg-amber-600 flex items-center justify-center gap-2">
+                        <i class="fas fa-map-marked-alt"></i> Run Venue Geolocation
+                    </button>
+                    <button id="add-venue-btn" class="px-4 py-2 bg-teal-600 text-white font-semibold rounded-lg shadow-md hover:bg-teal-700 flex items-center justify-center gap-2">
+                        <i class="fas fa-plus"></i> Add Venue
+                    </button>
+                </div>
+            </div>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                 <div class="bg-white p-6 rounded-xl shadow-md border flex items-center">
                     <div class="p-4 bg-teal-100 text-teal-600 rounded-full mr-4"><i class="fas fa-map-marker-alt fa-2x"></i></div>
@@ -163,12 +173,11 @@
     </main>
 </div>
 
+<!-- All modals remain the same -->
 <div id="edit-gig-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-start justify-center p-4 hidden overflow-y-auto"><div class="w-full max-w-3xl bg-white rounded-xl shadow-2xl m-4"><div class="p-6 border-b flex justify-between items-center"><h2 class="text-2xl font-bold text-slate-800">Edit Gig</h2><button class="modal-close-btn text-slate-400 hover:text-slate-600 text-2xl">&times;</button></div><form id="edit-gig-form" class="p-6"><input type="hidden" name="rowId"><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"><div><label class="text-sm font-medium">Date</label><input type="date" name="date" class="w-full mt-1 p-2 border rounded-md"></div><div><label class="text-sm font-medium">Time</label><div class="flex items-center mt-1"><input type="text" name="hour" placeholder="H" maxlength="2" class="w-12 p-2 border rounded-md text-center"><span class="font-bold mx-1">:</span><input type="text" name="minutes" placeholder="MM" maxlength="2" class="w-16 p-2 border rounded-md text-center"><select name="ampm" class="ml-2 p-2 border rounded-md bg-white"><option>AM</option><option>PM</option></select></div></div><div><label class="text-sm font-medium">Band Name</label><input type="text" name="name" class="w-full mt-1 p-2 border rounded-md"></div><div class="lg:col-span-3"><label class="text-sm font-medium">Address</label><input type="text" name="address" class="w-full mt-1 p-2 border rounded-md"></div><div class="lg:col-span-3"><label class="text-sm font-medium">Google Maps Link</label><input type="url" name="googleMapsLink" class="w-full mt-1 p-2 border rounded-md"></div><div><label class="text-sm font-medium">Latitude</label><input type="text" name="latitude" placeholder="e.g., 40.7128" class="w-full mt-1 p-2 border rounded-md"></div><div><label class="text-sm font-medium">Longitude</label><input type="text" name="longitude" placeholder="e.g., -74.0060" class="w-full mt-1 p-2 border rounded-md"></div><div><label class="text-sm font-medium">Band Website</label><input type="url" name="band_website" class="w-full mt-1 p-2 border rounded-md"></div><div><label class="text-sm font-medium">Band Email</label><input type="email" name="band_email" class="w-full mt-1 p-2 border rounded-md"></div><div><label class="text-sm font-medium">Venue Name</label><input type="text" name="venue_name" class="w-full mt-1 p-2 border rounded-md"></div><div><label class="text-sm font-medium">Venue Website</label><input type="url" name="venue_website" class="w-full mt-1 p-2 border rounded-md"></div><div><label class="text-sm font-medium">Venue Phone</label><input type="tel" name="venue_phone_number" class="w-full mt-1 p-2 border rounded-md"></div><div><label class="text-sm font-medium">Venue Email</label><input type="email" name="venue_email" class="w-full mt-1 p-2 border rounded-md"></div></div><div class="mt-6 flex justify-end gap-4"><button type="button" class="modal-cancel-btn px-4 py-2 bg-slate-200 rounded-md">Cancel</button><button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md">Save Changes</button></div></form></div></div>
 <div id="add-gig-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-start justify-center p-4 hidden overflow-y-auto"><div class="w-full max-w-3xl bg-white rounded-xl shadow-2xl m-4"><div class="p-6 border-b flex justify-between items-center"><h2 class="text-2xl font-bold text-slate-800">Add New Gig</h2><button class="modal-close-btn text-slate-400 hover:text-slate-600 text-2xl">&times;</button></div><form id="add-gig-form" class="p-6"><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"><div><label class="text-sm font-medium">Date</label><input type="date" name="date" class="w-full mt-1 p-2 border rounded-md"></div><div><label class="text-sm font-medium">Time</label><div class="flex items-center mt-1"><input type="text" name="hour" placeholder="H" maxlength="2" class="w-12 p-2 border rounded-md text-center"><span class="font-bold mx-1">:</span><input type="text" name="minutes" placeholder="MM" maxlength="2" class="w-16 p-2 border rounded-md text-center"><select name="ampm" class="ml-2 p-2 border rounded-md bg-white"><option>AM</option><option>PM</option></select></div></div><div><label class="text-sm font-medium">Band Name</label><input type="text" name="name" class="w-full mt-1 p-2 border rounded-md" required></div><div class="lg:col-span-3"><label class="text-sm font-medium">Address</label><input type="text" name="address" class="w-full mt-1 p-2 border rounded-md"></div><div class="lg:col-span-3"><label class="text-sm font-medium">Google Maps Link</label><input type="url" name="googleMapsLink" class="w-full mt-1 p-2 border rounded-md"></div><div><label class="text-sm font-medium">Latitude</label><input type="text" name="latitude" placeholder="e.g., 40.7128" class="w-full mt-1 p-2 border rounded-md"></div><div><label class="text-sm font-medium">Longitude</label><input type="text" name="longitude" placeholder="e.g., -74.0060" class="w-full mt-1 p-2 border rounded-md"></div><div><label class="text-sm font-medium">Band Website</label><input type="url" name="band_website" class="w-full mt-1 p-2 border rounded-md"></div><div><label class="text-sm font-medium">Band Email</label><input type="email" name="band_email" class="w-full mt-1 p-2 border rounded-md"></div><div><label class="text-sm font-medium">Venue Name</label><input type="text" name="venue_name" class="w-full mt-1 p-2 border rounded-md"></div><div><label class="text-sm font-medium">Venue Website</label><input type="url" name="venue_website" class="w-full mt-1 p-2 border rounded-md"></div><div><label class="text-sm font-medium">Venue Phone</label><input type="tel" name="venue_phone_number" class="w-full mt-1 p-2 border rounded-md"></div><div><label class="text-sm font-medium">Venue Email</label><input type="email" name="venue_email" class="w-full mt-1 p-2 border rounded-md"></div></div><div class="mt-6 flex justify-end gap-4"><button type="button" class="modal-cancel-btn px-4 py-2 bg-slate-200 rounded-md">Cancel</button><button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md">Add Gig</button></div></form></div></div>
-
 <div id="add-venue-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-start justify-center p-4 hidden overflow-y-auto"><div class="w-full max-w-xl bg-white rounded-xl shadow-2xl m-4"><div class="p-6 border-b flex justify-between items-center"><h2 class="text-2xl font-bold text-slate-800">Add New Venue</h2><button class="modal-close-btn text-slate-400 hover:text-slate-600 text-2xl">&times;</button></div><form id="add-venue-form" class="p-6"><div class="space-y-4"><div><label class="text-sm font-medium">Venue Name</label><input type="text" name="venueName" placeholder="The Rock House" class="w-full mt-1 p-2 border rounded-md" required></div><div><label class="text-sm font-medium">Venue Address</label><input type="text" name="venueAddress" placeholder="123 Music Lane" class="w-full mt-1 p-2 border rounded-md"></div><div><label class="text-sm font-medium">Venue Website</label><input type="url" name="venueWebsite" placeholder="https://therockhouse.com" class="w-full mt-1 p-2 border rounded-md"></div><div><label class="text-sm font-medium">Venue Phone Number</label><input type="tel" name="venuePhoneNumber" placeholder="(555) 123-4567" class="w-full mt-1 p-2 border rounded-md"></div><div><label class="text-sm font-medium">Latitude</label><input type="text" name="latitude" placeholder="e.g., 40.9565" class="w-full mt-1 p-2 border rounded-md"></div><div><label class="text-sm font-medium">Longitude</label><input type="text" name="longitude" placeholder="e.g., -72.2451" class="w-full mt-1 p-2 border rounded-md"></div></div><div class="mt-6 flex justify-end gap-4"><button type="button" class="modal-cancel-btn px-4 py-2 bg-slate-200 rounded-md">Cancel</button><button type="submit" class="px-4 py-2 bg-teal-600 text-white rounded-md">Add Venue</button></div></form></div></div>
 <div id="edit-venue-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-start justify-center p-4 hidden overflow-y-auto"><div class="w-full max-w-xl bg-white rounded-xl shadow-2xl m-4"><div class="p-6 border-b flex justify-between items-center"><h2 class="text-2xl font-bold text-slate-800">Edit Venue</h2><button class="modal-close-btn text-slate-400 hover:text-slate-600 text-2xl">&times;</button></div><form id="edit-venue-form" class="p-6"><input type="hidden" name="rowId"><div class="space-y-4"><div><label class="text-sm font-medium">Venue Name</label><input type="text" name="venueName" class="w-full mt-1 p-2 border rounded-md" required></div><div><label class="text-sm font-medium">Venue Address</label><input type="text" name="venueAddress" class="w-full mt-1 p-2 border rounded-md"></div><div><label class="text-sm font-medium">Venue Website</label><input type="url" name="venueWebsite" class="w-full mt-1 p-2 border rounded-md"></div><div><label class="text-sm font-medium">Venue Phone Number</label><input type="tel" name="venuePhoneNumber" class="w-full mt-1 p-2 border rounded-md"></div><div><label class="text-sm font-medium">Latitude</label><input type="text" name="latitude" placeholder="e.g., 40.9565" class="w-full mt-1 p-2 border rounded-md"></div><div><label class="text-sm font-medium">Longitude</label><input type="text" name="longitude" placeholder="e.g., -72.2451" class="w-full mt-1 p-2 border rounded-md"></div></div><div class="mt-6 flex justify-end gap-4"><button type="button" class="modal-cancel-btn px-4 py-2 bg-slate-200 rounded-md">Cancel</button><button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md">Save Changes</button></div></form></div></div>
-
 <div id="add-gallery-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-start justify-center p-4 hidden overflow-y-auto"><div class="w-full max-w-xl bg-white rounded-xl shadow-2xl m-4"><div class="p-6 border-b flex justify-between items-center"><h2 class="text-2xl font-bold text-slate-800">Add to Gallery</h2><button class="modal-close-btn text-slate-400 hover:text-slate-600 text-2xl">&times;</button></div><form id="add-gallery-form" class="p-6"><div class="space-y-4"><div><label class="text-sm font-medium">Image URL</label><input type="url" name="imageUrl" placeholder="https://example.com/image.jpg" class="w-full mt-1 p-2 border rounded-md" required></div><div><label class="text-sm font-medium">Text</label><textarea name="text" rows="3" placeholder="Enter descriptive text..." class="w-full mt-1 p-2 border rounded-md"></textarea></div><div><label class="text-sm font-medium">Band Website (Optional)</label><input type="url" name="website" placeholder="https://exampleband.com" class="w-full mt-1 p-2 border rounded-md"></div></div><div class="mt-4 border p-4 rounded-lg bg-slate-50"><h4 class="text-sm font-bold mb-2 text-slate-600">Preview</h4><div id="add-preview-container" class="text-center"><img id="add-preview-img" src="https://via.placeholder.com/400x200.png?text=Image+Preview" class="max-w-xs h-auto rounded-md mx-auto mb-2 bg-slate-200 object-cover" onerror="this.onerror=null; this.src='https://via.placeholder.com/400x200.png?text=Invalid+URL';"><p id="add-preview-text" class="text-slate-700 italic">Your text will appear here.</p></div></div><div class="mt-6 flex justify-end gap-4"><button type="button" class="modal-cancel-btn px-4 py-2 bg-slate-200 rounded-md">Cancel</button><button type="submit" class="px-4 py-2 bg-green-600 text-white rounded-md">Add to Gallery</button></div></form></div></div>
 <div id="edit-gallery-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-start justify-center p-4 hidden overflow-y-auto"><div class="w-full max-w-xl bg-white rounded-xl shadow-2xl m-4"><div class="p-6 border-b flex justify-between items-center"><h2 class="text-2xl font-bold text-slate-800">Edit Gallery Item</h2><button class="modal-close-btn text-slate-400 hover:text-slate-600 text-2xl">&times;</button></div><form id="edit-gallery-form" class="p-6"><input type="hidden" name="rowId"><div class="space-y-4"><div><label class="text-sm font-medium">Image URL</label><input type="url" name="imageUrl" class="w-full mt-1 p-2 border rounded-md" required></div><div><label class="text-sm font-medium">Text</label><textarea name="text" rows="3" class="w-full mt-1 p-2 border rounded-md"></textarea></div><div><label class="text-sm font-medium">Band Website (Optional)</label><input type="url" name="website" class="w-full mt-1 p-2 border rounded-md"></div></div><div class="mt-4 border p-4 rounded-lg bg-slate-50"><h4 class="text-sm font-bold mb-2 text-slate-600">Preview</h4><div id="edit-preview-container" class="text-center"><img id="edit-preview-img" src="https://via.placeholder.com/400x200.png?text=Image+Preview" class="max-w-xs h-auto rounded-md mx-auto mb-2 bg-slate-200 object-cover" onerror="this.onerror=null; this.src='https://via.placeholder.com/400x200.png?text=Invalid+URL';"><p id="edit-preview-text" class="text-slate-700 italic"></p></div></div><div class="mt-6 flex justify-end gap-4"><button type="button" class="modal-cancel-btn px-4 py-2 bg-slate-200 rounded-md">Cancel</button><button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md">Save Changes</button></div></form></div></div>
 
@@ -190,25 +199,26 @@ document.addEventListener('DOMContentLoaded', () => {
     let allReviews = [], allGigs = [], allGalleryItems = [], allVenues = [];
 
     // --- Element Selectors ---
-    const sidebar = document.getElementById('sidebar');
-    const sidebarOverlay = document.getElementById('sidebar-overlay');
-    const burgerBtn = document.getElementById('burger-btn');
     const passwordOverlay=document.getElementById("password-overlay"),passwordForm=document.getElementById("password-form"),passwordInput=document.getElementById("password-input"),passwordError=document.getElementById("password-error"),loginButton=document.getElementById("login-button");
     const loadingOverlay=document.getElementById("loadingOverlay"),customAlertContainer=document.getElementById("customAlert-container");
     const confirmModalContainer=document.getElementById('confirm-modal-container'),confirmTitle=document.getElementById('confirm-title'),confirmMessage=document.getElementById('confirm-message'),confirmOkBtn=document.getElementById('confirm-ok-btn'),confirmCancelBtn=document.getElementById('confirm-cancel-btn');
+    const burgerBtn = document.getElementById('burger-btn'), sidebar = document.getElementById('sidebar'), sidebarOverlay = document.getElementById('sidebar-overlay');
 
     const reviewsTableBody=document.getElementById("reviews-table-body"),noReviewsMessage=document.getElementById("no-reviews-message");
     const gigsTableBody=document.getElementById("gigs-table-body"),noGigsMessage=document.getElementById("no-gigs-message");
     const galleryTableBody = document.getElementById('gallery-table-body'), noGalleryMessage = document.getElementById('no-gallery-message');
     const venuesTableBody = document.getElementById('venues-table-body'), noVenuesMessage = document.getElementById('no-venues-message');
     
-    const editGigModal=document.getElementById("edit-gig-modal"),editGigForm=document.getElementById("edit-gig-form");
-    const addGigModal=document.getElementById("add-gig-modal"),addGigBtn=document.getElementById("add-gig-btn"),addGigForm=document.getElementById("add-gig-form");
-    const runGeolocationBtn = document.getElementById('run-geolocation-btn');
-    const addGalleryModal = document.getElementById('add-gallery-modal'), addGalleryBtn = document.getElementById('add-gallery-btn'), addGalleryForm = document.getElementById('add-gallery-form');
-    const editGalleryModal = document.getElementById('edit-gallery-modal'), editGalleryForm = document.getElementById('edit-gallery-form');
-    const addVenueModal = document.getElementById('add-venue-modal'), addVenueBtn = document.getElementById('add-venue-btn'), addVenueForm = document.getElementById('add-venue-form');
+    const addGigBtn=document.getElementById("add-gig-btn"), runGeolocationBtn = document.getElementById('run-geolocation-btn');
+    const addVenueBtn = document.getElementById('add-venue-btn'), runVenueGeolocationBtn = document.getElementById('run-venue-geolocation-btn');
+    const addGalleryBtn = document.getElementById('add-gallery-btn');
+
+    const addGigModal=document.getElementById("add-gig-modal"), addGigForm=document.getElementById("add-gig-form");
+    const editGigModal=document.getElementById("edit-gig-modal"), editGigForm=document.getElementById("edit-gig-form");
+    const addVenueModal = document.getElementById('add-venue-modal'), addVenueForm = document.getElementById('add-venue-form');
     const editVenueModal = document.getElementById('edit-venue-modal'), editVenueForm = document.getElementById('edit-venue-form');
+    const addGalleryModal = document.getElementById('add-gallery-modal'), addGalleryForm = document.getElementById('add-gallery-form');
+    const editGalleryModal = document.getElementById('edit-gallery-modal'), editGalleryForm = document.getElementById('edit-gallery-form');
 
     const navLinks={dashboard:document.getElementById("nav-dashboard"),reviews:document.getElementById("nav-reviews"),gigs:document.getElementById("nav-gigs"),venues:document.getElementById("nav-venues"),gallery:document.getElementById("nav-gallery")};
     const contentAreas={dashboard:document.getElementById("dashboard-content"),reviews:document.getElementById("reviews-content"),gigs:document.getElementById("gigs-content"),venues:document.getElementById('venues-content'),gallery:document.getElementById('gallery-content')};
@@ -228,43 +238,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const today = new Date();
         today.setHours(0, 0, 0, 0);
         const upcomingGigsCount = allGigs.filter(g => new Date(normalizeDate(g.date)) >= today).length;
-
         document.getElementById('dashboard-stat-upcoming').textContent = upcomingGigsCount;
         document.getElementById('dashboard-stat-pending').textContent = pendingReviewsCount;
         document.getElementById('dashboard-stat-total-gigs').textContent = allGigs.length;
         document.getElementById('dashboard-stat-total-reviews').textContent = allReviews.length;
-
         const upcomingGigsContainer = document.getElementById('dashboard-upcoming-gigs');
         upcomingGigsContainer.innerHTML = '';
         const upcomingGigs = allGigs.filter(g => new Date(normalizeDate(g.date)) >= today).sort((a, b) => new Date(normalizeDate(a.date)) - new Date(normalizeDate(b.date))).slice(0, 5);
-
-        if (upcomingGigs.length > 0) {
-            upcomingGigs.forEach(gig => {
-                const gigEl = document.createElement('div');
-                gigEl.className = 'flex items-center justify-between p-3 rounded-lg hover:bg-slate-50';
-                gigEl.innerHTML = `<div><p class="font-semibold text-slate-800">${gig.name}</p><p class="text-sm text-slate-500">${gig.venueName||'N/A'}</p></div><div class="text-right"><p class="font-medium text-slate-700">${gig.date}</p><p class="text-sm text-slate-500">${formatTimeDisplay(gig.time)}</p></div>`;
-                upcomingGigsContainer.appendChild(gigEl);
-            });
-        } else {
-            upcomingGigsContainer.innerHTML = '<p class="text-slate-500 text-center py-8">No upcoming gigs found.</p>';
-        }
-
+        if (upcomingGigs.length > 0) { upcomingGigs.forEach(gig => { const gigEl = document.createElement('div'); gigEl.className = 'flex items-center justify-between p-3 rounded-lg hover:bg-slate-50'; gigEl.innerHTML = `<div><p class="font-semibold text-slate-800">${gig.name}</p><p class="text-sm text-slate-500">${gig.venueName||'N/A'}</p></div><div class="text-right"><p class="font-medium text-slate-700">${gig.date}</p><p class="text-sm text-slate-500">${formatTimeDisplay(gig.time)}</p></div>`; upcomingGigsContainer.appendChild(gigEl); }); } else { upcomingGigsContainer.innerHTML = '<p class="text-slate-500 text-center py-8">No upcoming gigs found.</p>'; }
         const pendingReviewsContainer = document.getElementById('dashboard-pending-reviews');
         pendingReviewsContainer.innerHTML = '';
         const pendingReviews = allReviews.filter(r => !r.isApproved).slice(0, 5);
-
-        if (pendingReviews.length > 0) {
-            pendingReviews.forEach(review => {
-                const reviewEl = document.createElement('div');
-                reviewEl.className = 'p-3 rounded-lg hover:bg-slate-50';
-                reviewEl.innerHTML = `<div class="flex items-center justify-between"><div><p class="font-semibold text-slate-800">${review.name}</p><p class="text-sm text-slate-500">${review.gigName}</p></div><div class="flex">${Array.from({ length: 5 }, (v, i) => `<i class="fa-solid fa-star ${i < review.rating ? 'text-amber-400' : 'text-slate-300'}"></i>`).join('')}</div></div>`;
-                pendingReviewsContainer.appendChild(reviewEl);
-            });
-        } else {
-            pendingReviewsContainer.innerHTML = '<p class="text-slate-500 text-center py-8">No pending reviews.</p>';
-        }
+        if (pendingReviews.length > 0) { pendingReviews.forEach(review => { const reviewEl = document.createElement('div'); reviewEl.className = 'p-3 rounded-lg hover:bg-slate-50'; reviewEl.innerHTML = `<div class="flex items-center justify-between"><div><p class="font-semibold text-slate-800">${review.name}</p><p class="text-sm text-slate-500">${review.gigName}</p></div><div class="flex">${Array.from({ length: 5 }, (v, i) => `<i class="fa-solid fa-star ${i < review.rating ? 'text-amber-400' : 'text-slate-300'}"></i>`).join('')}</div></div>`; pendingReviewsContainer.appendChild(reviewEl); }); } else { pendingReviewsContainer.innerHTML = '<p class="text-slate-500 text-center py-8">No pending reviews.</p>'; }
     };
-
     const populateReviewsStats=()=>{const e=allReviews.filter(e=>e.isApproved).length;document.getElementById("stat-total-reviews").textContent=allReviews.length,document.getElementById("stat-approved-reviews").textContent=e,document.getElementById("stat-pending-reviews").textContent=allReviews.length-e};
     const populateGigsStats=()=>{const e=new Date;e.setHours(0,0,0,0);let t=0,o=0;allGigs.forEach(s=>{const n=new Date(normalizeDate(s.date));n>=e?t++:o++}),document.getElementById("stat-total-gigs").textContent=allGigs.length,document.getElementById("stat-upcoming-gigs").textContent=t,document.getElementById("stat-past-gigs").textContent=o};
     const populateGalleryStats = () => { document.getElementById("stat-total-gallery-items").textContent = allGalleryItems.length; };
@@ -278,121 +264,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const loadAppData = async () => {
         showLoading(true);
         try {
-            const fetchPromises = [];
-            
-            fetchPromises.push(new Promise((resolve, reject) => {
-                if (!REVIEWS_CSV_URL || REVIEWS_CSV_URL === "PASTE_YOUR_REVIEW_DATABASE_CSV_URL_HERE") {
-                    showCustomAlert("Review CSV URL is missing.", "error");
-                    return reject("Review CSV URL is missing.");
-                }
-                Papa.parse(REVIEWS_CSV_URL, {
-                    download: true, header: true, skipEmptyLines: true,
-                    transformHeader: h => (h.trim().charAt(0).toLowerCase() + h.slice(1)).replace(/\s+/g, ''),
-                    complete: result => {
-                        allReviews = result.data.map((r, i) => ({
-                            ...r,
-                            row: i + 2,
-                            isApproved: String(r.approval || 'false').trim().toLowerCase() === 'true'
-                        }));
-                        populateReviewsTable();
-                        populateReviewsStats();
-                        resolve();
-                    },
-                    error: err => {
-                        console.error("PapaParse Reviews Error:", err);
-                        showCustomAlert("Failed to load Reviews CSV.", "error");
-                        reject(err);
-                    }
-                });
-            }));
-
-            fetchPromises.push(new Promise((resolve, reject) => {
-                Papa.parse(GIG_LIST_CSV_URL, {
-                    download: true, header: true, skipEmptyLines: true,
-                    transformHeader: h => h.trim().toLowerCase(),
-                    complete: result => {
-                        allGigs = result.data.map((g, i) => ({
-                            name: g.name || "",
-                            bandWebsite: g["band website"] || "",
-                            bandEmail: g["band email"] || "",
-                            venueName: g["venue name"] || "",
-                            address: g.address || "",
-                            venueWebsite: g["venue website"] || "",
-                            venuePhone: g["venue phone number"] || "",
-                            venueEmail: g["venue email"] || "",
-                            date: g.date || "",
-                            time: g.time || "",
-                            googleMapsLink: g["google maps link"] || "",
-                            latitude: g.latitude || "",
-                            longitude: g.longitude || "",
-                            row: i + 2
-                        }));
-                        populateGigsTable();
-                        populateGigsStats();
-                        resolve();
-                    },
-                    error: err => {
-                        console.error("PapaParse Gigs Error:", err);
-                        showCustomAlert("Failed to load Gigs CSV.", "error");
-                        reject(err);
-                    }
-                });
-            }));
-
-            fetchPromises.push(new Promise((resolve, reject) => {
-                Papa.parse(GALLERY_CSV_URL, {
-                    download: true, header: true, skipEmptyLines: true,
-                    transformHeader: h => h.trim().toLowerCase().replace(/\s+/g, ''),
-                    complete: result => {
-                        allGalleryItems = result.data.map((item, index) => ({
-                            imageUrl: item.imageurl || "",
-                            text: item.text || "",
-                            website: item.website || "",
-                            row: index + 2
-                        }));
-                        populateGalleryTable();
-                        populateGalleryStats();
-                        resolve();
-                    },
-                    error: err => {
-                        console.error("PapaParse Gallery Error:", err);
-                        showCustomAlert("Failed to load Gallery CSV.", "error");
-                        reject(err);
-                    }
-                });
-            }));
-            
-            fetchPromises.push(new Promise((resolve, reject) => {
-                Papa.parse(VENUES_CSV_URL, {
-                    download: true, header: true, skipEmptyLines: true,
-                    transformHeader: h => h.trim().toLowerCase().replace(/\s+/g, ''),
-                    complete: result => {
-                        allVenues = result.data.map((v, i) => ({
-                            name: v.name || v.venuename || "",
-                            address: v.address || v.venueaddress || "",
-                            website: v.website || v.venuewebsite || "",
-                            phone: v.phone || v.venuephonenumber || "",
-                            latitude: v.latitude || "",
-                            longitude: v.longitude || "",
-                            row: i + 2
-                        }));
-                        populateVenuesTable();
-                        populateVenuesStats();
-                        resolve();
-                    },
-                    error: err => {
-                        console.error("PapaParse Venues Error:", err);
-                        showCustomAlert("Failed to load Venues CSV.", "error");
-                        reject(err);
-                    }
-                });
-            }));
-            
+            const fetchPromises = [
+                new Promise((resolve, reject) => Papa.parse(REVIEWS_CSV_URL, { download: true, header: true, skipEmptyLines: true, transformHeader: h => (h.trim().charAt(0).toLowerCase() + h.slice(1)).replace(/\s+/g, ''), complete: r => { allReviews = r.data.map((i,x)=>({...i, row:x+2, isApproved:String(i.approval||'false').trim().toLowerCase()==='true'})); populateReviewsTable(); populateReviewsStats(); resolve(); }, error: e => reject(e) })),
+                new Promise((resolve, reject) => Papa.parse(GIG_LIST_CSV_URL, { download: true, header: true, skipEmptyLines: true, transformHeader: h => h.trim().toLowerCase(), complete: r => { allGigs = r.data.map((g,i)=>({name:g.name||"",bandWebsite:g["band website"]||"",bandEmail:g["band email"]||"",venueName:g["venue name"]||"",address:g.address||"",venueWebsite:g["venue website"]||"",venuePhone:g["venue phone number"]||"",venueEmail:g["venue email"]||"",date:g.date||"",time:g.time||"",googleMapsLink:g["google maps link"]||"",latitude:g.latitude||"",longitude:g.longitude||"",row:i+2})); populateGigsTable(); populateGigsStats(); resolve(); }, error: e => reject(e) })),
+                new Promise((resolve, reject) => Papa.parse(GALLERY_CSV_URL, { download: true, header: true, skipEmptyLines: true, transformHeader: h => h.trim().toLowerCase().replace(/\s+/g, ''), complete: r => { allGalleryItems = r.data.map((i,x)=>({imageUrl:i.imageurl||"",text:i.text||"",website:i.website||"",row:x+2})); populateGalleryTable(); populateGalleryStats(); resolve(); }, error: e => reject(e) })),
+                new Promise((resolve, reject) => Papa.parse(VENUES_CSV_URL, { download: true, header: true, skipEmptyLines: true, transformHeader: h => h.trim().toLowerCase().replace(/\s+/g, ''), complete: r => { allVenues = r.data.map((v,i)=>({name:v.name||v.venuename||"",address:v.address||v.venueaddress||"",website:v.website||v.venuewebsite||"",phone:v.phone||v.venuephonenumber||"",latitude:v.latitude||"",longitude:v.longitude||"",row:i+2})); populateVenuesTable(); populateVenuesStats(); resolve(); }, error: e => reject(e) }))
+            ];
             await Promise.all(fetchPromises);
             updateDashboard();
         } catch (e) {
             console.error("Error loading data:", e);
-            showCustomAlert(`Error: ${e.message}`, "error");
+            showCustomAlert(`Failed to load data. Check console for details.`, "error");
         } finally {
             showLoading(false);
         }
@@ -412,18 +294,14 @@ document.addEventListener('DOMContentLoaded', () => {
             
             if (action.startsWith('delete')) {
                 showCustomAlert(`${type} permanently deleted!`, "success");
-                if (type === "Review") { allReviews = allReviews.filter(review => review.row != rowId); populateReviewsTable(); populateReviewsStats(); } 
-                else if (type === "Gig") { allGigs = allGigs.filter(gig => gig.row != rowId); populateGigsTable(); populateGigsStats(); } 
-                else if (type === "Gallery Item") { allGalleryItems = allGalleryItems.filter(item => item.row != rowId); populateGalleryTable(); populateGalleryStats(); }
-                else if (type === "Venue") { allVenues = allVenues.filter(venue => venue.row != rowId); populateVenuesTable(); populateVenuesStats(); }
-            } else { // Handle approve/unapprove for reviews
-                const reviewToUpdate = allReviews.find(review => review.row == rowId);
-                if (reviewToUpdate) {
-                    reviewToUpdate.isApproved = action === "approveReview";
-                    showCustomAlert(reviewToUpdate.isApproved ? "Review approved!" : "Review un-approved.", "success");
-                    populateReviewsTable();
-                    populateReviewsStats();
-                } else { throw new Error("Review not found for update."); }
+                if (type === "Review") { allReviews = allReviews.filter(i => i.row != rowId); populateReviewsTable(); populateReviewsStats(); } 
+                else if (type === "Gig") { allGigs = allGigs.filter(i => i.row != rowId); populateGigsTable(); populateGigsStats(); } 
+                else if (type === "Gallery Item") { allGalleryItems = allGalleryItems.filter(i => i.row != rowId); populateGalleryTable(); populateGalleryStats(); }
+                else if (type === "Venue") { allVenues = allVenues.filter(i => i.row != rowId); populateVenuesTable(); populateVenuesStats(); }
+            } else {
+                const reviewToUpdate = allReviews.find(i => i.row == rowId);
+                if (reviewToUpdate) { reviewToUpdate.isApproved = action === "approveReview"; showCustomAlert(reviewToUpdate.isApproved ? "Review approved!" : "Review un-approved.", "success"); populateReviewsTable(); populateReviewsStats(); } 
+                else { throw new Error("Review not found for update."); }
             }
         } catch (e) { showCustomAlert(`Error: ${e.message}`, "error"); } finally { icon.className = originalIconClass; button.disabled = false; updateDashboard(); }
     };
@@ -442,86 +320,13 @@ document.addEventListener('DOMContentLoaded', () => {
             if (result.status !== 'success') throw new Error(result.message);
             showCustomAlert(isAddMode ? "Gig added successfully!" : "Gig updated successfully!", "success");
             (isAddMode ? addGigModal : editGigModal).classList.add('hidden');
-            
-            if (isAddMode) {
-                allGigs.push(result.newGig);
-            } else {
-                const updatedRowId = form.elements.rowId.value;
-                const gigToUpdate = allGigs.find(gig => gig.row == updatedRowId);
-                if (gigToUpdate) {
-                    Object.assign(gigToUpdate, {
-                        date: form.elements.date.value.replace(/-/g, '/'),
-                        time: time,
-                        name: form.elements.name.value,
-                        address: form.elements.address.value,
-                        googleMapsLink: form.elements.googleMapsLink.value,
-                        latitude: form.elements.latitude.value,
-                        longitude: form.elements.longitude.value,
-                        bandWebsite: form.elements.band_website.value,
-                        bandEmail: form.elements.band_email.value,
-                        venueName: form.elements.venue_name.value,
-                        venueWebsite: form.elements.venue_website.value,
-                        venuePhone: form.elements.venue_phone_number.value,
-                        venueEmail: form.elements.venue_email.value
-                    });
-                }
-            }
-            populateGigsTable();
-            populateGigsStats();
-            updateDashboard();
-
-        } catch (error) { 
-            showCustomAlert(`Error: ${error.message}`, "error"); 
-        } finally { 
-            submitBtn.disabled = false; 
-            submitBtn.textContent = isAddMode ? "Add Gig" : "Save Changes"; 
-            if (isAddMode) form.reset(); 
-        }
-    };
-    const submitGalleryForm = async e => {
-        e.preventDefault();
-        const form = e.target, isAddMode = form.id === 'add-gallery-form', modal = isAddMode ? addGalleryModal : editGalleryModal, submitBtn = form.querySelector('button[type="submit"]');
-        submitBtn.disabled = true, submitBtn.textContent = isAddMode ? "Adding..." : "Saving...";
-        const formData = new FormData(form); formData.append("action", isAddMode ? "addGalleryItem" : "updateGalleryItem");
-        try {
-            const response = await fetch(APPS_SCRIPT_URL, { method: "POST", body: formData });
-            if (!response.ok) throw new Error("Server communication error.");
-            const result = await response.json();
-            if (result.status !== 'success') throw new Error(result.message);
-            showCustomAlert(isAddMode ? "Image added successfully!" : "Image updated successfully!", "success");
-            modal.classList.add('hidden');
-            
-            if (isAddMode) {
-                allGalleryItems.push(result.newGalleryItem);
-            } else {
-                const updatedRowId = form.elements.rowId.value;
-                const itemToUpdate = allGalleryItems.find(item => item.row == updatedRowId);
-                if (itemToUpdate) {
-                    Object.assign(itemToUpdate, {
-                        imageUrl: form.elements.imageUrl.value,
-                        text: form.elements.text.value,
-                        website: form.elements.website.value
-                    });
-                }
-            }
-            populateGalleryTable();
-            populateGalleryStats();
-            updateDashboard();
-
-        } catch (error) {
-            showCustomAlert(`Error: ${error.message}`, "error");
-        } finally {
-            submitBtn.disabled = false, submitBtn.textContent = isAddMode ? "Add to Gallery" : "Save Changes";
-            if (isAddMode) {
-                form.reset();
-                document.getElementById('add-preview-img').src = 'https://via.placeholder.com/400x200.png?text=Image+Preview';
-                document.getElementById('add-preview-text').textContent = 'Your text will appear here.';
-            }
-        }
+            await loadAppData();
+        } catch (error) { showCustomAlert(`Error: ${error.message}`, "error"); } 
+        finally { submitBtn.disabled = false; submitBtn.textContent = isAddMode ? "Add Gig" : "Save Changes"; if (isAddMode) form.reset(); }
     };
     const submitVenueForm = async e => {
         e.preventDefault();
-        const form = e.target, isAddMode = form.id === 'add-venue-form', modal = isAddMode ? addVenueModal : editVenueModal, submitBtn = form.querySelector('button[type="submit"]');
+        const form = e.target, isAddMode = form.id === 'add-venue-form', submitBtn = form.querySelector('button[type="submit"]');
         submitBtn.disabled = true, submitBtn.textContent = isAddMode ? "Adding..." : "Saving...";
         const formData = new FormData(form); formData.append("action", isAddMode ? "addVenue" : "updateVenue");
         try {
@@ -530,71 +335,55 @@ document.addEventListener('DOMContentLoaded', () => {
             const result = await response.json(); 
             if (result.status !== 'success') throw new Error(result.message);
             showCustomAlert(isAddMode ? "Venue added successfully!" : "Venue updated successfully!", "success"); 
-            modal.classList.add('hidden');
-            
-            if (isAddMode) {
-                allVenues.push(result.newVenue);
-            } else {
-                const updatedRowId = form.elements.rowId.value;
-                const venueToUpdate = allVenues.find(v => v.row == updatedRowId);
-                if (venueToUpdate) {
-                    Object.assign(venueToUpdate, {
-                        name: form.elements.venueName.value,
-                        address: form.elements.venueAddress.value,
-                        website: form.elements.venueWebsite.value,
-                        phone: form.elements.venuePhoneNumber.value,
-                        latitude: form.elements.latitude.value,
-                        longitude: form.elements.longitude.value
-                    });
-                }
-            }
-            populateVenuesTable();
-            populateVenuesStats();
-            updateDashboard();
-
-        } catch (error) { 
-            showCustomAlert(`Error: ${error.message}`, "error"); 
-        } finally { 
-            submitBtn.disabled = false, submitBtn.textContent = isAddMode ? "Add Venue" : "Save Changes"; 
-            if (isAddMode) form.reset(); 
-        }
+            (isAddMode ? addVenueModal : editVenueModal).classList.add('hidden');
+            await loadAppData();
+        } catch (error) { showCustomAlert(`Error: ${error.message}`, "error"); } 
+        finally { submitBtn.disabled = false, submitBtn.textContent = isAddMode ? "Add Venue" : "Save Changes"; if (isAddMode) form.reset(); }
+    };
+    const submitGalleryForm = async e => {
+        e.preventDefault();
+        const form = e.target, isAddMode = form.id === 'add-gallery-form', submitBtn = form.querySelector('button[type="submit"]');
+        submitBtn.disabled = true, submitBtn.textContent = isAddMode ? "Adding..." : "Saving...";
+        const formData = new FormData(form); formData.append("action", isAddMode ? "addGalleryItem" : "updateGalleryItem");
+        try {
+            const response = await fetch(APPS_SCRIPT_URL, { method: "POST", body: formData });
+            if (!response.ok) throw new Error("Server communication error.");
+            const result = await response.json();
+            if (result.status !== 'success') throw new Error(result.message);
+            showCustomAlert(isAddMode ? "Image added successfully!" : "Image updated successfully!", "success");
+            (isAddMode ? addGalleryModal : editGalleryModal).classList.add('hidden');
+            await loadAppData();
+        } catch (error) { showCustomAlert(`Error: ${error.message}`, "error"); } 
+        finally { submitBtn.disabled = false, submitBtn.textContent = isAddMode ? "Add to Gallery" : "Save Changes"; if (isAddMode) { form.reset(); document.getElementById('add-preview-img').src = 'https://via.placeholder.com/400x200.png?text=Image+Preview'; document.getElementById('add-preview-text').textContent = 'Your text will appear here.'; } }
     };
 
-    // --- Event Listeners ---
-    passwordForm.addEventListener("submit",async e=>{e.preventDefault(),passwordError.textContent="",loginButton.disabled=!0,loginButton.textContent="Verifying...";try{const t=new FormData;t.append("action","validatePassword"),t.append("password",passwordInput.value);const o=await fetch(APPS_SCRIPT_URL,{method:"POST",body:t});if(!o.ok)throw new Error("Network error");const s=await o.json();if("success"===s.status)passwordOverlay.style.transition="opacity 0.5s ease",passwordOverlay.style.opacity="0",setTimeout(()=>{passwordOverlay.style.display="none",loadAppData()},500);else throw new Error(s.message||"Incorrect password.")}catch(e){passwordError.textContent=e.message,loginButton.disabled=!1,loginButton.textContent="Login"}});
-    reviewsTableBody.addEventListener("click",async e=>{const t=e.target.closest("button");if(!t)return;const o=t.closest("tr").dataset.id;if(t.classList.contains("approve-btn"))handleAction("approveReview",o,t,"Review");else if(t.classList.contains("unapprove-btn"))handleAction("unapproveReview",o,t,"Review");else if(t.classList.contains("delete-btn"))try{const e=allReviews.find(e=>e.row==o).name;await showConfirm("Delete Review?",`Are you sure you want to permanently delete the review by ${e}?`),handleAction("deleteReview",o,t,"Review")}catch(e){}});
-    gigsTableBody.addEventListener("click", async event => {
-        const button = event.target.closest("button"); if (!button) return;
-        const rowId = button.closest("tr").dataset.rowId; const gigData = allGigs.find(g => g.row == rowId); if (!gigData) return;
-        if (button.classList.contains("edit-gig-btn")) {
-            const timeParts = parseTime(gigData.time);
-            editGigForm.elements.rowId.value = gigData.row; editGigForm.elements.date.value = normalizeDate(gigData.date); editGigForm.elements.hour.value = timeParts.hour; editGigForm.elements.minutes.value = timeParts.minutes; editGigForm.elements.ampm.value = timeParts.ampm; editGigForm.elements.name.value = gigData.name; editGigForm.elements.address.value = gigData.address; editGigForm.elements.googleMapsLink.value = gigData.googleMapsLink; editGigForm.elements.band_website.value = gigData.bandWebsite; editGigForm.elements.band_email.value = gigData.bandEmail; editGigForm.elements.venue_name.value = gigData.venueName; editGigForm.elements.venue_website.value = gigData.venueWebsite; editGigForm.elements.venue_phone_number.value = gigData.venuePhone; editGigForm.elements.venue_email.value = gigData.venueEmail; editGigForm.elements.latitude.value = gigData.latitude; editGigForm.elements.longitude.value = gigData.longitude; editGigModal.classList.remove("hidden");
-        } else if (button.classList.contains("delete-gig-btn")) { try { await showConfirm("Delete Gig?", `Are you sure you want to permanently delete the gig for ${gigData.name} on ${gigData.date}?`); handleAction("deleteGig", rowId, button, "Gig"); } catch (err) { /* User cancelled */ } }
-    });
-    galleryTableBody.addEventListener("click", async e => {const button = e.target.closest("button"); if (!button) return; const rowId = button.closest("tr").dataset.rowId; const item = allGalleryItems.find(i => i.row == rowId); if (button.classList.contains("edit-gallery-btn")) { editGalleryForm.elements.rowId.value = item.row; editGalleryForm.elements.imageUrl.value = item.imageUrl; editGalleryForm.elements.text.value = item.text; editGalleryForm.elements.website.value = item.website; document.getElementById('edit-preview-img').src = item.imageUrl || 'https://via.placeholder.com/400x200.png?text=Image+Preview'; document.getElementById('edit-preview-text').textContent = item.text || 'Your text will appear here.'; editGalleryModal.classList.remove("hidden"); } else if (button.classList.contains("delete-gallery-btn")) { try { await showConfirm("Delete Gallery Item?", `Are you sure you want to permanently delete this gallery item?`); handleAction("deleteGalleryItem", rowId, button, "Gallery Item"); } catch (err) { /* User cancelled */ } } });
-    venuesTableBody.addEventListener("click", async e => { const button = e.target.closest("button"); if (!button) return; const rowId = button.closest("tr").dataset.rowId; const venue = allVenues.find(v => v.row == rowId); if (button.classList.contains("edit-venue-btn")) { editVenueForm.elements.rowId.value = venue.row; editVenueForm.elements.venueName.value = venue.name; editVenueForm.elements.venueAddress.value = venue.address; editVenueForm.elements.venueWebsite.value = venue.website; editVenueForm.elements.venuePhoneNumber.value = venue.phone; editVenueForm.elements.latitude.value = venue.latitude; editVenueForm.elements.longitude.value = venue.longitude; editVenueModal.classList.remove("hidden"); } else if (button.classList.contains("delete-venue-btn")) { try { await showConfirm("Delete Venue?", `Are you sure you want to permanently delete the venue "${venue.name}"?`); handleAction("deleteVenue", rowId, button, "Venue"); } catch (err) { /* User cancelled */ } } });
-    addGigBtn.addEventListener('click', () => { addGigForm.reset(); addGigModal.classList.remove('hidden'); });
-    runGeolocationBtn.addEventListener('click', async () => {
-        const gigsToGeocode = allGigs.filter(g => g.address && (!g.latitude || !g.longitude));
+    // --- Geolocation Logic ---
+    const runGeolocation = async (type) => {
+        const itemsToGeocode = type === 'gigs' 
+            ? allGigs.filter(g => g.address && (!g.latitude || !g.longitude))
+            : allVenues.filter(v => v.address && (!v.latitude || !v.longitude));
+        
+        const itemType = type === 'gigs' ? 'gig' : 'venue';
+        const button = type === 'gigs' ? runGeolocationBtn : runVenueGeolocationBtn;
+        const action = type === 'gigs' ? 'geocodeGigsWithGeoapify' : 'geocodeVenuesWithGeoapify';
 
-        if (gigsToGeocode.length === 0) {
-            showCustomAlert("No gigs require geocoding.", "info");
+        if (itemsToGeocode.length === 0) {
+            showCustomAlert(`No ${itemType}s require geocoding.`, "info");
             return;
         }
 
         try {
             await showConfirm(
-                'Run Geolocation?',
-                `This will attempt to find coordinates for ${gigsToGeocode.length} gig(s). This may take a moment. Continue?`
+                `Run ${itemType.charAt(0).toUpperCase() + itemType.slice(1)} Geolocation?`,
+                `This will find coordinates for ${itemsToGeocode.length} ${itemType}(s). Continue?`
             );
 
-            const btnIcon = runGeolocationBtn.querySelector("i");
-            runGeolocationBtn.disabled = true;
-            btnIcon.className = "fas fa-spinner btn-spinner";
+            button.disabled = true;
+            button.querySelector("i").className = "fas fa-spinner btn-spinner";
 
-            const rowIds = gigsToGeocode.map(g => g.row);
+            const rowIds = itemsToGeocode.map(item => item.row);
             const formData = new FormData();
-            formData.append("action", "geocodeWithGeoapify");
+            formData.append("action", action);
             formData.append("rowIds", JSON.stringify(rowIds));
 
             const response = await fetch(GEOAPIFY_SCRIPT_URL, { method: "POST", body: formData });
@@ -603,47 +392,45 @@ document.addEventListener('DOMContentLoaded', () => {
             const result = await response.json();
             if (result.status !== 'success') throw new Error(result.message);
 
-            showCustomAlert(`${result.geocodedCount || 0} gig(s) were geocoded. Reloading data...`, "success");
-            
-            await loadAppData(); 
+            showCustomAlert(`${result.geocodedCount || 0} ${itemType}(s) were geocoded. Reloading data...`, "success");
+            await loadAppData();
 
         } catch (err) {
-            if (err) { 
-                showCustomAlert(`Error: ${err.message}`, "error");
-            }
+            if (err) { showCustomAlert(`Error: ${err.message}`, "error"); }
         } finally {
-            runGeolocationBtn.disabled = false;
-            runGeolocationBtn.querySelector("i").className = 'fas fa-map-marked-alt';
+            button.disabled = false;
+            button.querySelector("i").className = 'fas fa-map-marked-alt';
         }
-    });
-    addGalleryBtn.addEventListener('click', () => { addGalleryForm.reset(); addGalleryModal.classList.remove('hidden'); });
+    };
+
+    // --- Event Listeners ---
+    passwordForm.addEventListener("submit",async e=>{e.preventDefault(),passwordError.textContent="",loginButton.disabled=!0,loginButton.textContent="Verifying...";try{const t=new FormData;t.append("action","validatePassword"),t.append("password",passwordInput.value);const o=await fetch(APPS_SCRIPT_URL,{method:"POST",body:t});if(!o.ok)throw new Error("Network error");const s=await o.json();if("success"===s.status)passwordOverlay.style.transition="opacity 0.5s ease",passwordOverlay.style.opacity="0",setTimeout(()=>{passwordOverlay.style.display="none",loadAppData()},500);else throw new Error(s.message||"Incorrect password.")}catch(e){passwordError.textContent=e.message,loginButton.disabled=!1,loginButton.textContent="Login"}});
+    reviewsTableBody.addEventListener("click",async e=>{const t=e.target.closest("button");if(!t)return;const o=t.closest("tr").dataset.id;if(t.classList.contains("approve-btn"))handleAction("approveReview",o,t,"Review");else if(t.classList.contains("unapprove-btn"))handleAction("unapproveReview",o,t,"Review");else if(t.classList.contains("delete-btn"))try{const e=allReviews.find(i=>i.row==o).name;await showConfirm("Delete Review?",`Are you sure you want to permanently delete the review by ${e}?`),handleAction("deleteReview",o,t,"Review")}catch(e){/* User cancelled */}});
+    gigsTableBody.addEventListener("click", async e => { const b=e.target.closest("button");if(!b)return;const r=b.closest("tr").dataset.rowId,d=allGigs.find(g=>g.row==r);if(!d)return;if(b.classList.contains("edit-gig-btn")){const t=parseTime(d.time);Object.assign(editGigForm.elements,{rowId:{value:d.row},date:{value:normalizeDate(d.date)},hour:{value:t.hour},minutes:{value:t.minutes},ampm:{value:t.ampm},name:{value:d.name},address:{value:d.address},googleMapsLink:{value:d.googleMapsLink},band_website:{value:d.bandWebsite},band_email:{value:d.bandEmail},venue_name:{value:d.venueName},venue_website:{value:d.venueWebsite},venue_phone_number:{value:d.venuePhone},venue_email:{value:d.venueEmail},latitude:{value:d.latitude},longitude:{value:d.longitude}});editGigModal.classList.remove("hidden")}else if(b.classList.contains("delete-gig-btn"))try{await showConfirm("Delete Gig?",`Are you sure you want to permanently delete the gig for ${d.name} on ${d.date}?`);handleAction("deleteGig",r,b,"Gig")}catch(err){/* User cancelled */}});
+    venuesTableBody.addEventListener("click", async e => { const b=e.target.closest("button");if(!b)return;const r=b.closest("tr").dataset.rowId,d=allVenues.find(v=>v.row==r);if(!d)return;if(b.classList.contains("edit-venue-btn")){Object.assign(editVenueForm.elements,{rowId:{value:d.row},venueName:{value:d.name},venueAddress:{value:d.address},venueWebsite:{value:d.website},venuePhoneNumber:{value:d.phone},latitude:{value:d.latitude},longitude:{value:d.longitude}});editVenueModal.classList.remove("hidden")}else if(b.classList.contains("delete-venue-btn"))try{await showConfirm("Delete Venue?",`Are you sure you want to permanently delete the venue "${d.name}"?`);handleAction("deleteVenue",r,b,"Venue")}catch(err){/* User cancelled */}});
+    galleryTableBody.addEventListener("click", async e => {const b=e.target.closest("button");if(!b)return;const r=b.closest("tr").dataset.rowId,d=allGalleryItems.find(i=>i.row==r);if(b.classList.contains("edit-gallery-btn")){Object.assign(editGalleryForm.elements,{rowId:{value:d.row},imageUrl:{value:d.imageUrl},text:{value:d.text},website:{value:d.website}});document.getElementById('edit-preview-img').src=d.imageUrl||'https://via.placeholder.com/400x200.png?text=Image+Preview';document.getElementById('edit-preview-text').textContent=d.text||'Your text will appear here.';editGalleryModal.classList.remove("hidden")}else if(b.classList.contains("delete-gallery-btn"))try{await showConfirm("Delete Gallery Item?","Are you sure you want to permanently delete this gallery item?");handleAction("deleteGalleryItem",r,b,"Gallery Item")}catch(err){/* User cancelled */}});
+    
+    addGigBtn.addEventListener('click', () => { addGigForm.reset(); addGigModal.classList.remove('hidden'); });
     addVenueBtn.addEventListener('click', () => { addVenueForm.reset(); addVenueModal.classList.remove('hidden'); });
+    addGalleryBtn.addEventListener('click', () => { addGalleryForm.reset(); document.getElementById('add-preview-img').src='https://via.placeholder.com/400x200.png?text=Image+Preview'; document.getElementById('add-preview-text').textContent='Your text will appear here.'; addGalleryModal.classList.remove('hidden'); });
+    runGeolocationBtn.addEventListener('click', () => runGeolocation('gigs'));
+    runVenueGeolocationBtn.addEventListener('click', () => runGeolocation('venues'));
+
     addGigForm.addEventListener("submit",submitGigForm);
     editGigForm.addEventListener("submit",submitGigForm);
-    addGalleryForm.addEventListener("submit", submitGalleryForm);
-    editGalleryForm.addEventListener("submit", submitGalleryForm);
     addVenueForm.addEventListener('submit', submitVenueForm);
     editVenueForm.addEventListener('submit', submitVenueForm);
+    addGalleryForm.addEventListener("submit", submitGalleryForm);
+    editGalleryForm.addEventListener("submit", submitGalleryForm);
+    
     const setupPreview = (formId, imgId, textId, defaultText) => { const form = document.getElementById(formId), img = document.getElementById(imgId), text = document.getElementById(textId), urlInput = form.elements.imageUrl, textInput = form.elements.text; urlInput.addEventListener('input', () => { img.src = urlInput.value || 'https://via.placeholder.com/400x200.png?text=Image+Preview'; }); textInput.addEventListener('input', () => { text.textContent = textInput.value || defaultText; }); };
     setupPreview('add-gallery-form', 'add-preview-img', 'add-preview-text', 'Your text will appear here.');
     setupPreview('edit-gallery-form', 'edit-preview-img', 'edit-preview-text', '');
 
-    // --- Mobile Sidebar Logic ---
-    const toggleSidebar = () => {
-        sidebar.classList.toggle('-translate-x-full');
-        sidebarOverlay.classList.toggle('hidden');
-    };
+    const toggleSidebar = () => { sidebar.classList.toggle('-translate-x-full'); sidebarOverlay.classList.toggle('hidden'); };
     burgerBtn.addEventListener('click', toggleSidebar);
     sidebarOverlay.addEventListener('click', toggleSidebar);
-    document.querySelectorAll('.sidebar-link').forEach(link => {
-        link.addEventListener('click', () => {
-            if (window.innerWidth < 768) { // md breakpoint in tailwind
-                toggleSidebar();
-            }
-        });
-    });
-
-    // --- General Setup ---
+    document.querySelectorAll('.sidebar-link').forEach(link => link.addEventListener('click', () => { if (window.innerWidth < 768) { toggleSidebar(); }}));
     document.querySelectorAll('.modal-close-btn, .modal-cancel-btn').forEach(b=>b.addEventListener('click',()=>b.closest('.fixed').classList.add('hidden')));
     Object.keys(navLinks).forEach(t=>{navLinks[t]&&navLinks[t].addEventListener("click",e=>{e.preventDefault(),showTab(t)})});
     document.getElementById('dashboard-view-gigs-btn').addEventListener('click', () => showTab('gigs'));
