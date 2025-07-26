@@ -99,7 +99,20 @@
 
         <div id="reviews-content" class="hidden"><h1 class="text-2xl sm:text-3xl font-bold text-slate-900 mb-8">Reviews Management</h1><div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8"><div class="bg-white p-6 rounded-xl shadow-md border flex items-center"><div class="p-4 bg-blue-100 text-blue-600 rounded-full mr-4"><i class="fas fa-star fa-2x"></i></div><div><p class="text-sm text-slate-500 font-medium">Total Reviews</p><p id="stat-total-reviews" class="text-3xl font-bold">0</p></div></div><div class="bg-white p-6 rounded-xl shadow-md border flex items-center"><div class="p-4 bg-green-100 text-green-600 rounded-full mr-4"><i class="fas fa-check-circle fa-2x"></i></div><div><p class="text-sm text-slate-500 font-medium">Approved Reviews</p><p id="stat-approved-reviews" class="text-3xl font-bold">0</p></div></div><div class="bg-white p-6 rounded-xl shadow-md border flex items-center"><div class="p-4 bg-yellow-100 text-yellow-600 rounded-full mr-4"><i class="fas fa-hourglass-half fa-2x"></i></div><div><p class="text-sm text-slate-500 font-medium">Pending Approval</p><p id="stat-pending-reviews" class="text-3xl font-bold">0</p></div></div></div><div class="bg-white rounded-xl shadow-md border overflow-hidden"><h2 class="text-xl font-semibold p-6 border-b">Manage Reviews</h2><div class="overflow-x-auto"><table class="admin-table w-full text-sm text-left"><thead class="text-xs uppercase"><tr><th class="px-2 md:px-6 py-3">#</th><th class="px-2 md:px-6 py-3">Reviewer</th><th class="px-2 md:px-6 py-3">Band / Venue</th><th class="px-2 md:px-6 py-3">Rating</th><th class="px-2 md:px-6 py-3">Review</th><th class="px-2 md:px-6 py-3 text-center">Status</th><th class="px-2 md:px-6 py-3 text-center">Actions</th></tr></thead><tbody id="reviews-table-body"></tbody></table><div id="no-reviews-message" class="text-center py-12 px-6"><p class="text-slate-500">Loading Reviews...</p></div></div></div></div>
 
-        <div id="gigs-content" class="hidden"><div class="flex flex-col sm:flex-row justify-between sm:items-center mb-8 gap-4"><h1 class="text-2xl sm:text-3xl font-bold text-slate-900">Gigs Management</h1><button id="add-gig-btn" class="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 flex items-center justify-center gap-2"><i class="fas fa-plus"></i> Add Gig</button></div><div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8"><div class="bg-white p-6 rounded-xl shadow-md border flex items-center"><div class="p-4 bg-purple-100 text-purple-600 rounded-full mr-4"><i class="fas fa-guitar fa-2x"></i></div><div><p class="text-sm text-slate-500 font-medium">Total Gigs</p><p id="stat-total-gigs" class="text-3xl font-bold">0</p></div></div><div class="bg-white p-6 rounded-xl shadow-md border flex items-center"><div class="p-4 bg-cyan-100 text-cyan-600 rounded-full mr-4"><i class="fas fa-calendar-alt fa-2x"></i></div><div><p class="text-sm text-slate-500 font-medium">Upcoming Gigs</p><p id="stat-upcoming-gigs" class="text-3xl font-bold">0</p></div></div><div class="bg-white p-6 rounded-xl shadow-md border flex items-center"><div class="p-4 bg-orange-100 text-orange-600 rounded-full mr-4"><i class="fas fa-history fa-2x"></i></div><div><p class="text-sm text-slate-500 font-medium">Past Gigs</p><p id="stat-past-gigs" class="text-3xl font-bold">0</p></div></div></div><div class="bg-white rounded-xl shadow-md border overflow-hidden"><h2 class="text-xl font-semibold p-6 border-b">Manage Gigs</h2><div class="overflow-x-auto"><table class="admin-table w-full text-sm text-left"><thead class="text-xs uppercase"><tr><th class="px-2 md:px-6 py-3">#</th><th class="px-2 md:px-6 py-3">Date & Time</th><th class="px-2 md:px-6 py-3">Band Name</th><th class="px-2 md:px-6 py-3">Venue Name</th><th class="px-2 md:px-6 py-3">Address</th><th class="px-2 md:px-6 py-3 text-center">Actions</th></tr></thead><tbody id="gigs-table-body"></tbody></table><div id="no-gigs-message" class="text-center py-12 px-6"><p class="text-slate-500">Loading Gigs...</p></div></div></div></div>
+        <div id="gigs-content" class="hidden">
+            <div class="flex flex-col sm:flex-row justify-between sm:items-center mb-8 gap-4">
+                <h1 class="text-2xl sm:text-3xl font-bold text-slate-900">Gigs Management</h1>
+                <div class="flex items-center gap-2">
+                    <button id="run-geolocation-btn" class="px-4 py-2 bg-amber-500 text-white font-semibold rounded-lg shadow-md hover:bg-amber-600 flex items-center justify-center gap-2">
+                        <i class="fas fa-map-marked-alt"></i> Run Geolocation
+                    </button>
+                    <button id="add-gig-btn" class="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 flex items-center justify-center gap-2">
+                        <i class="fas fa-plus"></i> Add Gig
+                    </button>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8"><div class="bg-white p-6 rounded-xl shadow-md border flex items-center"><div class="p-4 bg-purple-100 text-purple-600 rounded-full mr-4"><i class="fas fa-guitar fa-2x"></i></div><div><p class="text-sm text-slate-500 font-medium">Total Gigs</p><p id="stat-total-gigs" class="text-3xl font-bold">0</p></div></div><div class="bg-white p-6 rounded-xl shadow-md border flex items-center"><div class="p-4 bg-cyan-100 text-cyan-600 rounded-full mr-4"><i class="fas fa-calendar-alt fa-2x"></i></div><div><p class="text-sm text-slate-500 font-medium">Upcoming Gigs</p><p id="stat-upcoming-gigs" class="text-3xl font-bold">0</p></div></div><div class="bg-white p-6 rounded-xl shadow-md border flex items-center"><div class="p-4 bg-orange-100 text-orange-600 rounded-full mr-4"><i class="fas fa-history fa-2x"></i></div><div><p class="text-sm text-slate-500 font-medium">Past Gigs</p><p id="stat-past-gigs" class="text-3xl font-bold">0</p></div></div></div><div class="bg-white rounded-xl shadow-md border overflow-hidden"><h2 class="text-xl font-semibold p-6 border-b">Manage Gigs</h2><div class="overflow-x-auto"><table class="admin-table w-full text-sm text-left"><thead class="text-xs uppercase"><tr><th class="px-2 md:px-6 py-3">#</th><th class="px-2 md:px-6 py-3">Date & Time</th><th class="px-2 md:px-6 py-3">Band Name</th><th class="px-2 md:px-6 py-3">Venue Name</th><th class="px-2 md:px-6 py-3">Address</th><th class="px-2 md:px-6 py-3 text-center">Actions</th></tr></thead><tbody id="gigs-table-body"></tbody></table><div id="no-gigs-message" class="text-center py-12 px-6"><p class="text-slate-500">Loading Gigs...</p></div></div></div>
+        </div>
 
         <div id="venues-content" class="hidden">
             <div class="flex flex-col sm:flex-row justify-between sm:items-center mb-8 gap-4"><h1 class="text-2xl sm:text-3xl font-bold text-slate-900">Venues Management</h1><button id="add-venue-btn" class="px-4 py-2 bg-teal-600 text-white font-semibold rounded-lg shadow-md hover:bg-teal-700 flex items-center justify-center gap-2"><i class="fas fa-plus"></i> Add Venue</button></div>
@@ -167,6 +180,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     // --- URLs and State Variables ---
     const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyNt-oD_o9Vz0Uf9O-d16QMgb0HYsO_Gssy_GPu270oT9DIbzetPdrW72BhlrPgR29eBA/exec";
+    const GEOAPIFY_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzvDvhjD6c1hLSnb81533qp7no4_x5EKFI4vN7JQd52zN8-7v_0mlQqovcOBJwgKkwqdw/exec";
     
     const REVIEWS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRaeCIG4k0nRJAk-IQJRWr9OzkaKEVEWon5mdULnGEPhhW1AHzVo4oXB6eEuGvRRVSglpWg4em18Ri0/pub?gid=1554482653&single=true&output=csv"; 
     const GIG_LIST_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRaeCIG4k0nRJAk-IQJRWr9OzkaKEVEWon5mdULnGEPhhW1AHzVo4oXB6eEuGvRRVSglpWg4em18Ri0/pub?gid=1813652457&single=true&output=csv";
@@ -190,6 +204,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const editGigModal=document.getElementById("edit-gig-modal"),editGigForm=document.getElementById("edit-gig-form");
     const addGigModal=document.getElementById("add-gig-modal"),addGigBtn=document.getElementById("add-gig-btn"),addGigForm=document.getElementById("add-gig-form");
+    const runGeolocationBtn = document.getElementById('run-geolocation-btn');
     const addGalleryModal = document.getElementById('add-gallery-modal'), addGalleryBtn = document.getElementById('add-gallery-btn'), addGalleryForm = document.getElementById('add-gallery-form');
     const editGalleryModal = document.getElementById('edit-gallery-modal'), editGalleryForm = document.getElementById('edit-gallery-form');
     const addVenueModal = document.getElementById('add-venue-modal'), addVenueBtn = document.getElementById('add-venue-btn'), addVenueForm = document.getElementById('add-venue-form');
@@ -559,6 +574,48 @@ document.addEventListener('DOMContentLoaded', () => {
     galleryTableBody.addEventListener("click", async e => {const button = e.target.closest("button"); if (!button) return; const rowId = button.closest("tr").dataset.rowId; const item = allGalleryItems.find(i => i.row == rowId); if (button.classList.contains("edit-gallery-btn")) { editGalleryForm.elements.rowId.value = item.row; editGalleryForm.elements.imageUrl.value = item.imageUrl; editGalleryForm.elements.text.value = item.text; editGalleryForm.elements.website.value = item.website; document.getElementById('edit-preview-img').src = item.imageUrl || 'https://via.placeholder.com/400x200.png?text=Image+Preview'; document.getElementById('edit-preview-text').textContent = item.text || 'Your text will appear here.'; editGalleryModal.classList.remove("hidden"); } else if (button.classList.contains("delete-gallery-btn")) { try { await showConfirm("Delete Gallery Item?", `Are you sure you want to permanently delete this gallery item?`); handleAction("deleteGalleryItem", rowId, button, "Gallery Item"); } catch (err) { /* User cancelled */ } } });
     venuesTableBody.addEventListener("click", async e => { const button = e.target.closest("button"); if (!button) return; const rowId = button.closest("tr").dataset.rowId; const venue = allVenues.find(v => v.row == rowId); if (button.classList.contains("edit-venue-btn")) { editVenueForm.elements.rowId.value = venue.row; editVenueForm.elements.venueName.value = venue.name; editVenueForm.elements.venueAddress.value = venue.address; editVenueForm.elements.venueWebsite.value = venue.website; editVenueForm.elements.venuePhoneNumber.value = venue.phone; editVenueForm.elements.latitude.value = venue.latitude; editVenueForm.elements.longitude.value = venue.longitude; editVenueModal.classList.remove("hidden"); } else if (button.classList.contains("delete-venue-btn")) { try { await showConfirm("Delete Venue?", `Are you sure you want to permanently delete the venue "${venue.name}"?`); handleAction("deleteVenue", rowId, button, "Venue"); } catch (err) { /* User cancelled */ } } });
     addGigBtn.addEventListener('click', () => { addGigForm.reset(); addGigModal.classList.remove('hidden'); });
+    runGeolocationBtn.addEventListener('click', async () => {
+        const gigsToGeocode = allGigs.filter(g => g.address && (!g.latitude || !g.longitude));
+
+        if (gigsToGeocode.length === 0) {
+            showCustomAlert("No gigs require geocoding.", "info");
+            return;
+        }
+
+        try {
+            await showConfirm(
+                'Run Geolocation?',
+                `This will attempt to find coordinates for ${gigsToGeocode.length} gig(s). This may take a moment. Continue?`
+            );
+
+            const btnIcon = runGeolocationBtn.querySelector("i");
+            runGeolocationBtn.disabled = true;
+            btnIcon.className = "fas fa-spinner btn-spinner";
+
+            const rowIds = gigsToGeocode.map(g => g.row);
+            const formData = new FormData();
+            formData.append("action", "geocodeWithGeoapify");
+            formData.append("rowIds", JSON.stringify(rowIds));
+
+            const response = await fetch(GEOAPIFY_SCRIPT_URL, { method: "POST", body: formData });
+            if (!response.ok) throw new Error("Server communication error.");
+
+            const result = await response.json();
+            if (result.status !== 'success') throw new Error(result.message);
+
+            showCustomAlert(`${result.geocodedCount || 0} gig(s) were geocoded. Reloading data...`, "success");
+            
+            await loadAppData(); 
+
+        } catch (err) {
+            if (err) { 
+                showCustomAlert(`Error: ${err.message}`, "error");
+            }
+        } finally {
+            runGeolocationBtn.disabled = false;
+            runGeolocationBtn.querySelector("i").className = 'fas fa-map-marked-alt';
+        }
+    });
     addGalleryBtn.addEventListener('click', () => { addGalleryForm.reset(); addGalleryModal.classList.remove('hidden'); });
     addVenueBtn.addEventListener('click', () => { addVenueForm.reset(); addVenueModal.classList.remove('hidden'); });
     addGigForm.addEventListener("submit",submitGigForm);
