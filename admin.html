@@ -306,40 +306,70 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (e) { showCustomAlert(`Error: ${e.message}`, "error"); } finally { icon.className = originalIconClass; button.disabled = false; updateDashboard(); }
     };
     const submitGigForm = async e => {
-        e.preventDefault();
-        const form = e.target, isAddMode = form.id === 'add-gig-form', submitBtn = form.querySelector('button[type="submit"]');
-        submitBtn.disabled = true, submitBtn.textContent = isAddMode ? "Adding..." : "Saving...";
-        const formData = new FormData(form);
-        formData.append("action", isAddMode ? "addGig" : "updateGig");
-        const hour = form.elements.hour.value || '12'; const minutes = String(form.elements.minutes.value || '00').padStart(2, '0'); const ampm = form.elements.ampm.value; const time = `${hour}:${minutes} ${ampm}`;
-        formData.append("time", time); formData.delete('hour'); formData.delete('minutes'); formData.delete('ampm');
-        try {
-            const response = await fetch(APPS_SCRIPT_URL, { method: "POST", body: formData });
-            if (!response.ok) throw new Error("Server communication error.");
-            const result = await response.json();
-            if (result.status !== 'success') throw new Error(result.message);
-            showCustomAlert(isAddMode ? "Gig added successfully!" : "Gig updated successfully!", "success");
-            (isAddMode ? addGigModal : editGigModal).classList.add('hidden');
-            await loadAppData();
-        } catch (error) { showCustomAlert(`Error: ${error.message}`, "error"); } 
-        finally { submitBtn.disabled = false; submitBtn.textContent = isAddMode ? "Add Gig" : "Save Changes"; if (isAddMode) form.reset(); }
-    };
+    e.preventDefault();
+    const form = e.target, isAddMode = form.id === 'add-gig-form', submitBtn = form.querySelector('button[type="submit"]');
+    submitBtn.disabled = true, submitBtn.textContent = isAddMode ? "Adding..." : "Saving...";
+    const formData = new FormData(form);
+    formData.append("action", isAddMode ? "addGig" : "updateGig");
+
+    // Construct time string
+    const hour = form.elements.hour.value || '12';
+    const minutes = String(form.elements.minutes.value || '00').padStart(2, '0');
+    const ampm = form.elements.ampm.value;
+    const time = `${hour}:${minutes} ${ampm}`;
+    formData.append("time", time);
+    formData.delete('hour');
+    formData.delete('minutes');
+    formData.delete('ampm');
+
+    try {
+        const response = await fetch(APPS_SCRIPT_URL, { method: "POST", body: formData });
+        if (!response.ok) throw new Error("Server communication error.");
+        const result = await response.json();
+        if (result.status !== 'success') throw new Error(result.message);
+
+        showCustomAlert(isAddMode ? "Gig added successfully!" : "Gig updated successfully!", "success");
+        (isAddMode ? addGigModal : editGigModal).classList.add('hidden');
+
+        // Re-fetch all data to ensure the new item has its server-assigned row ID
+        // and is fully functional. This fixes the edit/delete issue.
+        await loadAppData();
+
+    } catch (error) {
+        showCustomAlert(`Error: ${error.message}`, "error");
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = isAddMode ? "Add Gig" : "Save Changes";
+        if (isAddMode) form.reset();
+    }
+};
     const submitVenueForm = async e => {
-        e.preventDefault();
-        const form = e.target, isAddMode = form.id === 'add-venue-form', submitBtn = form.querySelector('button[type="submit"]');
-        submitBtn.disabled = true, submitBtn.textContent = isAddMode ? "Adding..." : "Saving...";
-        const formData = new FormData(form); formData.append("action", isAddMode ? "addVenue" : "updateVenue");
-        try {
-            const response = await fetch(APPS_SCRIPT_URL, { method: "POST", body: formData });
-            if (!response.ok) throw new Error("Server communication error."); 
-            const result = await response.json(); 
-            if (result.status !== 'success') throw new Error(result.message);
-            showCustomAlert(isAddMode ? "Venue added successfully!" : "Venue updated successfully!", "success"); 
-            (isAddMode ? addVenueModal : editVenueModal).classList.add('hidden');
-            await loadAppData();
-        } catch (error) { showCustomAlert(`Error: ${error.message}`, "error"); } 
-        finally { submitBtn.disabled = false, submitBtn.textContent = isAddMode ? "Add Venue" : "Save Changes"; if (isAddMode) form.reset(); }
-    };
+    e.preventDefault();
+    const form = e.target, isAddMode = form.id === 'add-venue-form', submitBtn = form.querySelector('button[type="submit"]');
+    submitBtn.disabled = true, submitBtn.textContent = isAddMode ? "Adding..." : "Saving...";
+    const formData = new FormData(form);
+    formData.append("action", isAddMode ? "addVenue" : "updateVenue");
+
+    try {
+        const response = await fetch(APPS_SCRIPT_URL, { method: "POST", body: formData });
+        if (!response.ok) throw new Error("Server communication error.");
+        const result = await response.json();
+        if (result.status !== 'success') throw new Error(result.message);
+
+        showCustomAlert(isAddMode ? "Venue added successfully!" : "Venue updated successfully!", "success");
+        (isAddMode ? addVenueModal : editVenueModal).classList.add('hidden');
+
+        // Re-fetch all data to ensure the new venue has its server-assigned row ID
+        // and is fully functional.
+        await loadAppData();
+
+    } catch (error) {
+        showCustomAlert(`Error: ${error.message}`, "error");
+    } finally {
+        submitBtn.disabled = false, submitBtn.textContent = isAddMode ? "Add Venue" : "Save Changes";
+        if (isAddMode) form.reset();
+    }
+};
     const submitGalleryForm = async e => {
         e.preventDefault();
         const form = e.target, isAddMode = form.id === 'add-gallery-form', submitBtn = form.querySelector('button[type="submit"]');
@@ -406,7 +436,137 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Event Listeners ---
     passwordForm.addEventListener("submit",async e=>{e.preventDefault(),passwordError.textContent="",loginButton.disabled=!0,loginButton.textContent="Verifying...";try{const t=new FormData;t.append("action","validatePassword"),t.append("password",passwordInput.value);const o=await fetch(APPS_SCRIPT_URL,{method:"POST",body:t});if(!o.ok)throw new Error("Network error");const s=await o.json();if("success"===s.status)passwordOverlay.style.transition="opacity 0.5s ease",passwordOverlay.style.opacity="0",setTimeout(()=>{passwordOverlay.style.display="none",loadAppData()},500);else throw new Error(s.message||"Incorrect password.")}catch(e){passwordError.textContent=e.message,loginButton.disabled=!1,loginButton.textContent="Login"}});
     reviewsTableBody.addEventListener("click",async e=>{const t=e.target.closest("button");if(!t)return;const o=t.closest("tr").dataset.id;if(t.classList.contains("approve-btn"))handleAction("approveReview",o,t,"Review");else if(t.classList.contains("unapprove-btn"))handleAction("unapproveReview",o,t,"Review");else if(t.classList.contains("delete-btn"))try{const e=allReviews.find(i=>i.row==o).name;await showConfirm("Delete Review?",`Are you sure you want to permanently delete the review by ${e}?`),handleAction("deleteReview",o,t,"Review")}catch(e){/* User cancelled */}});
-    gigsTableBody.addEventListener("click", async e => { const b=e.target.closest("button");if(!b)return;const r=b.closest("tr").dataset.rowId,d=allGigs.find(g=>g.row==r);if(!d)return;if(b.classList.contains("edit-gig-btn")){const t=parseTime(d.time);Object.assign(editGigForm.elements,{rowId:{value:d.row},date:{value:normalizeDate(d.date)},hour:{value:t.hour},minutes:{value:t.minutes},ampm:{value:t.ampm},name:{value:d.name},address:{value:d.address},googleMapsLink:{value:d.googleMapsLink},band_website:{value:d.bandWebsite},band_email:{value:d.bandEmail},venue_name:{value:d.venueName},venue_website:{value:d.venueWebsite},venue_phone_number:{value:d.venuePhone},venue_email:{value:d.venueEmail},latitude:{value:d.latitude},longitude:{value:d.longitude}});editGigModal.classList.remove("hidden")}else if(b.classList.contains("delete-gig-btn"))try{await showConfirm("Delete Gig?",`Are you sure you want to permanently delete the gig for ${d.name} on ${d.date}?`);handleAction("deleteGig",r,b,"Gig")}catch(err){/* User cancelled */}});
+    // New, corrected code block
+// New, corrected code block
+gigsTableBody.addEventListener("click", async e => {
+    const button = e.target.closest("button");
+    if (!button) return;
+    const rowId = button.closest("tr").dataset.rowId;
+    const data = allGigs.find(g => g.row == rowId);
+    if (!data) return;
+
+    if (button.classList.contains("edit-gig-btn")) {
+        const form = editGigForm;
+        const time = parseTime(data.time);
+        form.elements.rowId.value = data.row;
+        form.elements.date.value = normalizeDate(data.date);
+        form.elements.hour.value = time.hour;
+        form.elements.minutes.value = time.minutes;
+        form.elements.ampm.value = time.ampm;
+        form.elements.name.value = data.name || '';
+        form.elements.address.value = data.address || '';
+        form.elements.googleMapsLink.value = data.googleMapsLink || '';
+        form.elements.band_website.value = data.bandWebsite || '';
+        form.elements.band_email.value = data.bandEmail || '';
+        form.elements.venue_name.value = data.venueName || '';
+        form.elements.venue_website.value = data.venueWebsite || '';
+        form.elements.venue_phone_number.value = data.venuePhone || '';
+        form.elements.venue_email.value = data.venueEmail || '';
+        form.elements.latitude.value = data.latitude || '';
+        form.elements.longitude.value = data.longitude || '';
+        editGigModal.classList.remove("hidden");
+    } else if (button.classList.contains("delete-gig-btn")) {
+        try {
+            await showConfirm("Delete Gig?", `Are you sure you want to permanently delete the gig for ${data.name} on ${data.date}?`);
+            handleAction("deleteGig", rowId, button, "Gig");
+        } catch (err) { /* User cancelled */ }
+    }
+});
+
+venuesTableBody.addEventListener("click", async e => {
+    const button = e.target.closest("button");
+    if (!button) return;
+    const rowId = button.closest("tr").dataset.rowId;
+    const data = allVenues.find(v => v.row == rowId);
+    if (!data) return;
+
+    if (button.classList.contains("edit-venue-btn")) {
+        const form = editVenueForm;
+        form.elements.rowId.value = data.row;
+        form.elements.venueName.value = data.name || '';
+        form.elements.venueAddress.value = data.address || '';
+        form.elements.venueWebsite.value = data.website || '';
+        form.elements.venuePhoneNumber.value = data.phone || '';
+        form.elements.latitude.value = data.latitude || '';
+        form.elements.longitude.value = data.longitude || '';
+        editVenueModal.classList.remove("hidden");
+    } else if (button.classList.contains("delete-venue-btn")) {
+        try {
+            await showConfirm("Delete Venue?", `Are you sure you want to permanently delete the venue "${data.name}"?`);
+            handleAction("deleteVenue", rowId, button, "Venue");
+        } catch (err) { /* User cancelled */ }
+    }
+});
+
+galleryTableBody.addEventListener("click", async e => {
+    const button = e.target.closest("button");
+    if (!button) return;
+    const rowId = button.closest("tr").dataset.rowId;
+    const data = allGalleryItems.find(i => i.row == rowId);
+    if (!data) return;
+
+    if (button.classList.contains("edit-gallery-btn")) {
+        const form = editGalleryForm;
+        form.elements.rowId.value = data.row;
+        form.elements.imageUrl.value = data.imageUrl || '';
+        form.elements.text.value = data.text || '';
+        form.elements.website.value = data.website || '';
+        document.getElementById('edit-preview-img').src = data.imageUrl || 'https://via.placeholder.com/400x200.png?text=Image+Preview';
+        document.getElementById('edit-preview-text').textContent = data.text || '';
+        editGalleryModal.classList.remove("hidden");
+    } else if (button.classList.contains("delete-gallery-btn")) {
+        try {
+            await showConfirm("Delete Gallery Item?", "Are you sure you want to permanently delete this gallery item?");
+            handleAction("deleteGalleryItem", rowId, button, "Gallery Item");
+        } catch (err) { /* User cancelled */ }
+    }
+});
+
+venuesTableBody.addEventListener("click", async e => {
+    const button = e.target.closest("button");
+    if (!button) return;
+    const rowId = button.closest("tr").dataset.rowId;
+    const data = allVenues.find(v => v.row == rowId);
+    if (!data) return;
+
+    if (button.classList.contains("edit-venue-btn")) {
+        Object.assign(editVenueForm.elements, {
+            rowId: { value: data.row }, venueName: { value: data.name },
+            venueAddress: { value: data.address }, venueWebsite: { value: data.website },
+            venuePhoneNumber: { value: data.phone }, latitude: { value: data.latitude },
+            longitude: { value: data.longitude }
+        });
+        editVenueModal.classList.remove("hidden");
+    } else if (button.classList.contains("delete-venue-btn")) {
+        try {
+            await showConfirm("Delete Venue?", `Are you sure you want to permanently delete the venue "${data.name}"?`);
+            handleAction("deleteVenue", rowId, button, "Venue");
+        } catch (err) { /* User cancelled */ }
+    }
+});
+
+galleryTableBody.addEventListener("click", async e => {
+    const button = e.target.closest("button");
+    if (!button) return;
+    const rowId = button.closest("tr").dataset.rowId;
+    const data = allGalleryItems.find(i => i.row == rowId);
+    if (!data) return; // This was the missing line that caused the error
+
+    if (button.classList.contains("edit-gallery-btn")) {
+        Object.assign(editGalleryForm.elements, {
+            rowId: { value: data.row }, imageUrl: { value: data.imageUrl },
+            text: { value: data.text }, website: { value: data.website }
+        });
+        document.getElementById('edit-preview-img').src = data.imageUrl || 'https://via.placeholder.com/400x200.png?text=Image+Preview';
+        document.getElementById('edit-preview-text').textContent = data.text || 'Your text will appear here.';
+        editGalleryModal.classList.remove("hidden");
+    } else if (button.classList.contains("delete-gallery-btn")) {
+        try {
+            await showConfirm("Delete Gallery Item?", "Are you sure you want to permanently delete this gallery item?");
+            handleAction("deleteGalleryItem", rowId, button, "Gallery Item");
+        } catch (err) { /* User cancelled */ }
+    }
+});
     venuesTableBody.addEventListener("click", async e => { const b=e.target.closest("button");if(!b)return;const r=b.closest("tr").dataset.rowId,d=allVenues.find(v=>v.row==r);if(!d)return;if(b.classList.contains("edit-venue-btn")){Object.assign(editVenueForm.elements,{rowId:{value:d.row},venueName:{value:d.name},venueAddress:{value:d.address},venueWebsite:{value:d.website},venuePhoneNumber:{value:d.phone},latitude:{value:d.latitude},longitude:{value:d.longitude}});editVenueModal.classList.remove("hidden")}else if(b.classList.contains("delete-venue-btn"))try{await showConfirm("Delete Venue?",`Are you sure you want to permanently delete the venue "${d.name}"?`);handleAction("deleteVenue",r,b,"Venue")}catch(err){/* User cancelled */}});
     galleryTableBody.addEventListener("click", async e => {const b=e.target.closest("button");if(!b)return;const r=b.closest("tr").dataset.rowId,d=allGalleryItems.find(i=>i.row==r);if(b.classList.contains("edit-gallery-btn")){Object.assign(editGalleryForm.elements,{rowId:{value:d.row},imageUrl:{value:d.imageUrl},text:{value:d.text},website:{value:d.website}});document.getElementById('edit-preview-img').src=d.imageUrl||'https://via.placeholder.com/400x200.png?text=Image+Preview';document.getElementById('edit-preview-text').textContent=d.text||'Your text will appear here.';editGalleryModal.classList.remove("hidden")}else if(b.classList.contains("delete-gallery-btn"))try{await showConfirm("Delete Gallery Item?","Are you sure you want to permanently delete this gallery item?");handleAction("deleteGalleryItem",r,b,"Gallery Item")}catch(err){/* User cancelled */}});
     
