@@ -68,6 +68,7 @@
             <a id="nav-gigs" class="sidebar-link flex items-center px-6 py-3 text-slate-700"><i class="fas fa-guitar w-6 mr-4"></i> Gigs</a>
             <a id="nav-venues" class="sidebar-link flex items-center px-6 py-3 text-slate-700"><i class="fas fa-map-marker-alt w-6 mr-4"></i> Venues</a>
             <a id="nav-gallery" class="sidebar-link flex items-center px-6 py-3 text-slate-700"><i class="fas fa-images w-6 mr-4"></i> Gallery</a>
+            <a id="nav-newsletter" class="sidebar-link flex items-center px-6 py-3 text-slate-700"><i class="fas fa-envelope w-6 mr-4"></i> Newsletter</a>
         </nav>
     </aside>
 
@@ -196,6 +197,39 @@
                 </div>
             </div>
         </div>
+        
+        <div id="newsletter-content" class="hidden">
+            <div class="flex flex-col sm:flex-row justify-between sm:items-center mb-8 gap-4">
+                <h1 class="text-2xl sm:text-3xl font-bold text-slate-900">Newsletter Subscriptions</h1>
+                <button id="add-newsletter-btn" class="px-4 py-2 bg-rose-600 text-white font-semibold rounded-lg shadow-md hover:bg-rose-700 flex items-center justify-center gap-2">
+                    <i class="fas fa-plus"></i> Add Subscriber
+                </button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                <div class="bg-white p-6 rounded-xl shadow-md border flex items-center">
+                    <div class="p-4 bg-rose-100 text-rose-600 rounded-full mr-4"><i class="fas fa-users fa-2x"></i></div>
+                    <div><p class="text-sm text-slate-500 font-medium">Total Subscribers</p><p id="stat-total-newsletter" class="text-3xl font-bold">0</p></div>
+                </div>
+            </div>
+            <div class="bg-white rounded-xl shadow-md border overflow-hidden">
+                <h2 class="text-xl font-semibold p-6 border-b">Manage Subscribers</h2>
+                <div class="overflow-x-auto">
+                    <table class="admin-table w-full text-sm text-left">
+                        <thead class="text-xs uppercase">
+                            <tr>
+                                <th class="px-2 md:px-6 py-3">#</th>
+                                <th class="px-2 md:px-6 py-3">Email</th>
+                                <th class="px-2 md:px-6 py-3">Subscribed On (MM-DD-YYYY)</th>
+                                <th class="px-2 md:px-6 py-3 text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="newsletter-table-body"></tbody>
+                    </table>
+                    <div id="no-newsletter-message" class="text-center py-12 px-6"><p class="text-slate-500">Loading Subscribers...</p></div>
+                </div>
+            </div>
+        </div>
+
     </main>
 </div>
 
@@ -205,6 +239,8 @@
 <div id="edit-venue-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-start justify-center p-4 hidden overflow-y-auto"><div class="w-full max-w-xl bg-white rounded-xl shadow-2xl m-4"><div class="p-6 border-b flex justify-between items-center"><h2 class="text-2xl font-bold text-slate-800">Edit Venue</h2><button class="modal-close-btn text-slate-400 hover:text-slate-600 text-2xl">&times;</button></div><form id="edit-venue-form" class="p-6"><input type="hidden" name="rowId"><div class="space-y-4"><div><label class="text-sm font-medium">Venue Name</label><input type="text" name="venueName" class="w-full mt-1 p-2 border rounded-md" required></div><div><label class="text-sm font-medium">Venue Address</label><input type="text" name="venueAddress" class="w-full mt-1 p-2 border rounded-md"></div><div><label class="text-sm font-medium">Venue Website</label><input type="url" name="venueWebsite" class="w-full mt-1 p-2 border rounded-md"></div><div><label class="text-sm font-medium">Venue Phone Number</label><input type="tel" name="venuePhoneNumber" class="w-full mt-1 p-2 border rounded-md"></div><div><label class="text-sm font-medium">Latitude</label><input type="text" name="latitude" placeholder="e.g., 40.9565" class="w-full mt-1 p-2 border rounded-md"></div><div><label class="text-sm font-medium">Longitude</label><input type="text" name="longitude" placeholder="e.g., -72.2451" class="w-full mt-1 p-2 border rounded-md"></div></div><div class="mt-6 flex justify-end gap-4"><button type="button" class="modal-cancel-btn px-4 py-2 bg-slate-200 rounded-md">Cancel</button><button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md">Save Changes</button></div></form></div></div>
 <div id="add-gallery-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-start justify-center p-4 hidden overflow-y-auto"><div class="w-full max-w-xl bg-white rounded-xl shadow-2xl m-4"><div class="p-6 border-b flex justify-between items-center"><h2 class="text-2xl font-bold text-slate-800">Add to Gallery</h2><button class="modal-close-btn text-slate-400 hover:text-slate-600 text-2xl">&times;</button></div><form id="add-gallery-form" class="p-6"><div class="space-y-4"><div><label class="text-sm font-medium">Image URL</label><input type="url" name="imageUrl" placeholder="https://example.com/image.jpg" class="w-full mt-1 p-2 border rounded-md" required></div><div><label class="text-sm font-medium">Text</label><textarea name="text" rows="3" placeholder="Enter descriptive text..." class="w-full mt-1 p-2 border rounded-md"></textarea></div><div><label class="text-sm font-medium">Band Website (Optional)</label><input type="url" name="website" placeholder="https://exampleband.com" class="w-full mt-1 p-2 border rounded-md"></div></div><div class="mt-4 border p-4 rounded-lg bg-slate-50"><h4 class="text-sm font-bold mb-2 text-slate-600">Preview</h4><div id="add-preview-container" class="text-center"><img id="add-preview-img" src="https://via.placeholder.com/400x200.png?text=Image+Preview" class="max-w-xs h-auto rounded-md mx-auto mb-2 bg-slate-200 object-cover" onerror="this.onerror=null; this.src='https://via.placeholder.com/400x200.png?text=Invalid+URL';"><p id="add-preview-text" class="text-slate-700 italic">Your text will appear here.</p></div></div><div class="mt-6 flex justify-end gap-4"><button type="button" class="modal-cancel-btn px-4 py-2 bg-slate-200 rounded-md">Cancel</button><button type="submit" class="px-4 py-2 bg-green-600 text-white rounded-md">Add to Gallery</button></div></form></div></div>
 <div id="edit-gallery-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-start justify-center p-4 hidden overflow-y-auto"><div class="w-full max-w-xl bg-white rounded-xl shadow-2xl m-4"><div class="p-6 border-b flex justify-between items-center"><h2 class="text-2xl font-bold text-slate-800">Edit Gallery Item</h2><button class="modal-close-btn text-slate-400 hover:text-slate-600 text-2xl">&times;</button></div><form id="edit-gallery-form" class="p-6"><input type="hidden" name="rowId"><div class="space-y-4"><div><label class="text-sm font-medium">Image URL</label><input type="url" name="imageUrl" class="w-full mt-1 p-2 border rounded-md" required></div><div><label class="text-sm font-medium">Text</label><textarea name="text" rows="3" class="w-full mt-1 p-2 border rounded-md"></textarea></div><div><label class="text-sm font-medium">Band Website (Optional)</label><input type="url" name="website" class="w-full mt-1 p-2 border rounded-md"></div></div><div class="mt-4 border p-4 rounded-lg bg-slate-50"><h4 class="text-sm font-bold mb-2 text-slate-600">Preview</h4><div id="edit-preview-container" class="text-center"><img id="edit-preview-img" src="https://via.placeholder.com/400x200.png?text=Image+Preview" class="max-w-xs h-auto rounded-md mx-auto mb-2 bg-slate-200 object-cover" onerror="this.onerror=null; this.src='https://via.placeholder.com/400x200.png?text=Invalid+URL';"><p id="edit-preview-text" class="text-slate-700 italic"></p></div></div><div class="mt-6 flex justify-end gap-4"><button type="button" class="modal-cancel-btn px-4 py-2 bg-slate-200 rounded-md">Cancel</button><button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md">Save Changes</button></div></form></div></div>
+<div id="add-newsletter-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-start justify-center p-4 hidden overflow-y-auto"><div class="w-full max-w-lg bg-white rounded-xl shadow-2xl m-4"><div class="p-6 border-b flex justify-between items-center"><h2 class="text-2xl font-bold text-slate-800">Add New Subscriber</h2><button class="modal-close-btn text-slate-400 hover:text-slate-600 text-2xl">&times;</button></div><form id="add-newsletter-form" class="p-6"><div class="space-y-4"><div><label class="text-sm font-medium">Email Address</label><input type="email" name="email" placeholder="subscriber@example.com" class="w-full mt-1 p-2 border rounded-md" required></div><div><label class="text-sm font-medium">Timestamp (MM-DD-YYYY)</label><input type="text" name="timestamp" placeholder="e.g., 7/28/2025" class="w-full mt-1 p-2 border rounded-md"></div></div><div class="mt-6 flex justify-end gap-4"><button type="button" class="modal-cancel-btn px-4 py-2 bg-slate-200 rounded-md">Cancel</button><button type="submit" class="px-4 py-2 bg-rose-600 text-white rounded-md">Add Subscriber</button></div></form></div></div>
+<div id="edit-newsletter-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-start justify-center p-4 hidden overflow-y-auto"><div class="w-full max-w-lg bg-white rounded-xl shadow-2xl m-4"><div class="p-6 border-b flex justify-between items-center"><h2 class="text-2xl font-bold text-slate-800">Edit Subscriber</h2><button class="modal-close-btn text-slate-400 hover:text-slate-600 text-2xl">&times;</button></div><form id="edit-newsletter-form" class="p-6"><input type="hidden" name="rowId"><div class="space-y-4"><div><label class="text-sm font-medium">Email Address</label><input type="email" name="email" class="w-full mt-1 p-2 border rounded-md" required></div><div><label class="text-sm font-medium">Timestamp (MM-DD-YYYY)</label><input type="text" name="timestamp" class="w-full mt-1 p-2 border rounded-md"></div></div><div class="mt-6 flex justify-end gap-4"><button type="button" class="modal-cancel-btn px-4 py-2 bg-slate-200 rounded-md">Cancel</button><button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md">Save Changes</button></div></form></div></div>
 
 <div id="confirm-modal-container" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-[60] flex items-center justify-center p-4 hidden"><div class="confirm-modal"><h3 id="confirm-title" class="text-lg font-bold text-slate-800">Are you sure?</h3><p id="confirm-message" class="text-slate-600 mt-2 mb-6">This action cannot be undone.</p><div class="flex justify-center gap-4"><button id="confirm-cancel-btn" class="px-6 py-2 bg-slate-200 text-slate-800 rounded-md font-semibold">Cancel</button><button id="confirm-ok-btn" class="px-6 py-2 bg-red-600 text-white rounded-md font-semibold">Delete</button></div></div></div>
 <div id="customAlert-container"></div>
@@ -221,19 +257,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const GALLERY_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRaeCIG4k0nRJAk-IQJRWr9OzkaKEVEWon5mdULnGEPhhW1AHzVo4oXB6eEuGvRRVSglpWg4em18Ri0/pub?gid=1107946029&single=true&output=csv";
     const VENUES_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRaeCIG4k0nRJAk-IQJRWr9OzkaKEVEWon5mdULnGEPhhW1AHzVo4oXB6eEuGvRRVSglpWg4em18Ri0/pub?gid=1904894569&single=true&output=csv";
 
-    let allReviews = [], allGigs = [], allGalleryItems = [], allVenues = [];
+    let allReviews = [], allGigs = [], allGalleryItems = [], allVenues = [], allNewsletterSubs = [];
     let dashboardChart, reviewsChart, gigsChart, venuesChart, galleryChart;
 
     // --- Global Chart Styling ---
     Chart.defaults.font.family = "'Inter', sans-serif";
     Chart.defaults.font.weight = '500';
-    Chart.defaults.color = '#64748b'; // slate-500
+    Chart.defaults.color = '#64748b';
     Chart.defaults.plugins.legend.position = 'bottom';
     Chart.defaults.plugins.legend.labels.usePointStyle = true;
     Chart.defaults.plugins.legend.labels.padding = 20;
-    Chart.defaults.plugins.tooltip.backgroundColor = '#1e293b'; // slate-800
-    Chart.defaults.plugins.tooltip.titleColor = '#f1f5f9'; // slate-100
-    Chart.defaults.plugins.tooltip.bodyColor = '#cbd5e1'; // slate-300
+    Chart.defaults.plugins.tooltip.backgroundColor = '#1e293b';
+    Chart.defaults.plugins.tooltip.titleColor = '#f1f5f9';
+    Chart.defaults.plugins.tooltip.bodyColor = '#cbd5e1';
     Chart.defaults.plugins.tooltip.cornerRadius = 4;
     Chart.defaults.plugins.tooltip.padding = 10;
     Chart.defaults.plugins.tooltip.displayColors = false;
@@ -247,17 +283,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const gigsTableBody=document.getElementById("gigs-table-body"),noGigsMessage=document.getElementById("no-gigs-message");
     const galleryTableBody = document.getElementById('gallery-table-body'), noGalleryMessage = document.getElementById('no-gallery-message');
     const venuesTableBody = document.getElementById('venues-table-body'), noVenuesMessage = document.getElementById('no-venues-message');
+    const newsletterTableBody = document.getElementById('newsletter-table-body'), noNewsletterMessage = document.getElementById('no-newsletter-message');
     const addGigBtn=document.getElementById("add-gig-btn"), runGeolocationBtn = document.getElementById('run-geolocation-btn');
     const addVenueBtn = document.getElementById('add-venue-btn'), runVenueGeolocationBtn = document.getElementById('run-venue-geolocation-btn');
     const addGalleryBtn = document.getElementById('add-gallery-btn');
+    const addNewsletterBtn = document.getElementById('add-newsletter-btn');
     const addGigModal=document.getElementById("add-gig-modal"), addGigForm=document.getElementById("add-gig-form");
     const editGigModal=document.getElementById("edit-gig-modal"), editGigForm=document.getElementById("edit-gig-form");
     const addVenueModal = document.getElementById('add-venue-modal'), addVenueForm = document.getElementById('add-venue-form');
     const editVenueModal = document.getElementById('edit-venue-modal'), editVenueForm = document.getElementById('edit-venue-form');
     const addGalleryModal = document.getElementById('add-gallery-modal'), addGalleryForm = document.getElementById('add-gallery-form');
     const editGalleryModal = document.getElementById('edit-gallery-modal'), editGalleryForm = document.getElementById('edit-gallery-form');
-    const navLinks={dashboard:document.getElementById("nav-dashboard"),reviews:document.getElementById("nav-reviews"),gigs:document.getElementById("nav-gigs"),venues:document.getElementById("nav-venues"),gallery:document.getElementById("nav-gallery")};
-    const contentAreas={dashboard:document.getElementById("dashboard-content"),reviews:document.getElementById("reviews-content"),gigs:document.getElementById("gigs-content"),venues:document.getElementById('venues-content'),gallery:document.getElementById('gallery-content')};
+    const addNewsletterModal = document.getElementById('add-newsletter-modal'), addNewsletterForm = document.getElementById('add-newsletter-form');
+    const editNewsletterModal = document.getElementById('edit-newsletter-modal'), editNewsletterForm = document.getElementById('edit-newsletter-form');
+    const navLinks={dashboard:document.getElementById("nav-dashboard"),reviews:document.getElementById("nav-reviews"),gigs:document.getElementById("nav-gigs"),venues:document.getElementById("nav-venues"),gallery:document.getElementById("nav-gallery"), newsletter:document.getElementById("nav-newsletter")};
+    const contentAreas={dashboard:document.getElementById("dashboard-content"),reviews:document.getElementById("reviews-content"),gigs:document.getElementById("gigs-content"),venues:document.getElementById('venues-content'),gallery:document.getElementById('gallery-content'), newsletter: document.getElementById('newsletter-content')};
 
     // --- Helper Functions ---
     const showLoading=s=>{loadingOverlay.style.display=s?"flex":"none"};
@@ -278,6 +318,8 @@ document.addEventListener('DOMContentLoaded', () => {
         populateVenuesStats();
         populateGalleryTable();
         populateGalleryStats();
+        populateNewsletterTable();
+        populateNewsletterStats();
         updateDashboard();
         renderDashboardChart();
         renderReviewsChart();
@@ -441,10 +483,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const populateGigsStats=()=>{const e=new Date;e.setHours(0,0,0,0);let t=0,o=0;allGigs.forEach(s=>{const n=new Date(normalizeDate(s.date));n>=e?t++:o++}),document.getElementById("stat-total-gigs").textContent=allGigs.length,document.getElementById("stat-upcoming-gigs").textContent=t,document.getElementById("stat-past-gigs").textContent=o};
     const populateGalleryStats = () => { document.getElementById("stat-total-gallery-items").textContent = allGalleryItems.length; };
     const populateVenuesStats = () => { document.getElementById("stat-total-venues").textContent = allVenues.length; };
+    const populateNewsletterStats = () => { document.getElementById("stat-total-newsletter").textContent = allNewsletterSubs.length; };
     const populateReviewsTable=()=>{reviewsTableBody.innerHTML="",allReviews.length?(noReviewsMessage.style.display="none",allReviews.sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt)).forEach((e,t)=>{const o=document.createElement("tr");o.className="border-b",o.dataset.id=e.row;const s=e.isApproved?"bg-green-100 text-green-800":"bg-yellow-100 text-yellow-800",n=e.isApproved?"Approved":"Pending",a=e.isApproved?`<button class="unapprove-btn text-white bg-slate-500 hover:bg-slate-600 text-xs px-3 py-1.5 rounded-lg" title="Un-approve"><i class="fas fa-times"></i></button>`:`<button class="approve-btn text-white bg-green-500 hover:bg-green-600 text-xs px-3 py-1.5 rounded-lg" title="Approve"><i class="fas fa-check"></i></button>`;o.innerHTML=`<td class="px-2 md:px-6 py-4 font-medium text-slate-500">${t+1}</td><td class="px-2 md:px-6 py-4"><div class="font-medium">${e.name}</div><div class="text-slate-500">${e.hometown||"N/A"}</div></td><td class="px-2 md:px-6 py-4"><div class="font-medium">${e.gigName}</div><div class="text-slate-500">${e.gigVenue}</div></td><td class="px-2 md:px-6 py-4"><div class="flex">${Array.from({length:5},(t,o)=>`<i class="fa-solid fa-star ${o<e.rating?"text-amber-400":"text-slate-300"}"></i>`).join("")}</div></td><td class="px-2 md:px-6 py-4 max-w-xs truncate" title="${e.reviewText}">${e.reviewText}</td><td class="px-2 md:px-6 py-4 text-center"><span class="status-badge text-xs px-2.5 py-0.5 rounded-full ${s}">${n}</span></td><td class="px-2 md:px-6 py-4 text-center"><div class="flex items-center justify-center gap-2">${a}<button class="delete-btn text-white bg-red-500 hover:bg-red-600 text-xs px-3 py-1.5 rounded-lg" title="Delete"><i class="fas fa-trash"></i></button></div></td>`,reviewsTableBody.appendChild(o)})):(noReviewsMessage.style.display="block",noReviewsMessage.querySelector("p").textContent="No reviews found.")};
     const populateGigsTable=()=>{gigsTableBody.innerHTML="",allGigs.length?(noGigsMessage.style.display="none",allGigs.forEach((e,t)=>{const o=document.createElement("tr");o.className="border-b",o.dataset.rowId=e.row,o.innerHTML=`<td class="px-2 md:px-6 py-4 font-medium text-slate-500">${t+1}</td><td class="px-2 md:px-6 py-4"><div>${e.date||""}</div><div class="text-sm text-slate-500">${formatTimeDisplay(e.time)}</div></td><td class="px-2 md:px-6 py-4 font-medium">${e.name||""}</td><td class="px-2 md:px-6 py-4">${e.venueName||""}</td><td class="px-2 md:px-6 py-4">${e.address||""}</td><td class="px-2 md:px-6 py-4 text-center"><div class="flex items-center justify-center gap-2"><button class="edit-gig-btn text-white bg-blue-500 hover:bg-blue-600 text-xs px-3 py-1.5 rounded-lg" title="Edit"><i class="fas fa-pencil-alt"></i></button><button class="delete-gig-btn text-white bg-red-500 hover:bg-red-600 text-xs px-3 py-1.5 rounded-lg" title="Delete"><i class="fas fa-trash"></i></button></div></td>`,gigsTableBody.appendChild(o)})):(noGigsMessage.style.display="block",noGigsMessage.querySelector("p").textContent="No gigs found.")};
     const populateGalleryTable = () => {galleryTableBody.innerHTML = ""; if (allGalleryItems.length) { noGalleryMessage.style.display = "none"; allGalleryItems.forEach((item, index) => { const row = document.createElement("tr"); row.className = "border-b"; row.dataset.rowId = item.row; const websiteCell = item.website ? `<a href="${item.website}" target="_blank" rel="noopener noreferrer" class="text-indigo-600 hover:text-indigo-800 hover:underline break-all">${item.website}</a>` : `<span class="text-slate-400">N/A</span>`; row.innerHTML = `<td class="px-2 md:px-6 py-4 font-medium text-slate-500">${index + 1}</td><td class="px-2 md:px-6 py-4"><img src="${item.imageUrl}" class="w-32 h-20 object-cover rounded-md bg-slate-200" onerror="this.onerror=null; this.src='https://via.placeholder.com/128x80.png?text=Error';"></td><td class="px-2 md:px-6 py-4 max-w-xs"><p class="whitespace-pre-wrap">${item.text || ''}</p></td><td class="px-2 md:px-6 py-4 max-w-xs">${websiteCell}</td><td class="px-2 md:px-6 py-4 text-center"><div class="flex items-center justify-center gap-2"><button class="edit-gallery-btn text-white bg-blue-500 hover:bg-blue-600 text-xs px-3 py-1.5 rounded-lg" title="Edit"><i class="fas fa-pencil-alt"></i></button><button class="delete-gallery-btn text-white bg-red-500 hover:bg-red-600 text-xs px-3 py-1.5 rounded-lg" title="Delete"><i class="fas fa-trash"></i></button></div></td>`; galleryTableBody.appendChild(row); }); } else { noGalleryMessage.style.display = "block"; noGalleryMessage.querySelector("p").textContent = "No gallery items found."; }};
     const populateVenuesTable = () => {venuesTableBody.innerHTML = ""; if (allVenues.length) { noVenuesMessage.style.display = "none"; allVenues.forEach((venue, index) => { const row = document.createElement("tr"); row.className = "border-b"; row.dataset.rowId = venue.row; const websiteCell = venue.website ? `<a href="${venue.website}" target="_blank" rel="noopener noreferrer" class="text-indigo-600 hover:text-indigo-800 hover:underline break-all">${venue.website}</a>` : `<span class="text-slate-400">N/A</span>`; row.innerHTML = `<td class="px-2 md:px-6 py-4 font-medium text-slate-500">${index + 1}</td><td class="px-2 md:px-6 py-4 font-medium">${venue.name || ''}</td><td class="px-2 md:px-6 py-4">${venue.address || ''}</td><td class="px-2 md:px-6 py-4 max-w-xs">${websiteCell}</td><td class="px-2 md:px-6 py-4">${venue.phone || ''}</td><td class="px-2 md:px-6 py-4 text-center"><div class="flex items-center justify-center gap-2"><button class="edit-venue-btn text-white bg-blue-500 hover:bg-blue-600 text-xs px-3 py-1.5 rounded-lg" title="Edit"><i class="fas fa-pencil-alt"></i></button><button class="delete-venue-btn text-white bg-red-500 hover:bg-red-600 text-xs px-3 py-1.5 rounded-lg" title="Delete"><i class="fas fa-trash"></i></button></div></td>`; venuesTableBody.appendChild(row); }); } else { noVenuesMessage.style.display = "block"; noVenuesMessage.querySelector("p").textContent = "No venues found."; }};
+    const populateNewsletterTable = () => { newsletterTableBody.innerHTML = ""; if (allNewsletterSubs.length) { noNewsletterMessage.style.display = "none"; allNewsletterSubs.forEach((sub, index) => { const row = document.createElement("tr"); row.className = "border-b"; row.dataset.rowId = sub.row; row.innerHTML = `<td class="px-2 md:px-6 py-4 font-medium text-slate-500">${index + 1}</td><td class="px-2 md:px-6 py-4 font-medium">${sub.email || ''}</td><td class="px-2 md:px-6 py-4">${sub.timestamp || ''}</td><td class="px-2 md:px-6 py-4 text-center"><div class="flex items-center justify-center gap-2"><button class="edit-newsletter-btn text-white bg-blue-500 hover:bg-blue-600 text-xs px-3 py-1.5 rounded-lg" title="Edit"><i class="fas fa-pencil-alt"></i></button><button class="delete-newsletter-btn text-white bg-red-500 hover:bg-red-600 text-xs px-3 py-1.5 rounded-lg" title="Delete"><i class="fas fa-trash"></i></button></div></td>`; newsletterTableBody.appendChild(row); }); } else { noNewsletterMessage.style.display = "block"; noNewsletterMessage.querySelector("p").textContent = "No newsletter subscribers found."; }};
 
     // --- Data Loading ---
     const loadAppData = async () => {
@@ -454,7 +498,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 new Promise((resolve, reject) => Papa.parse(REVIEWS_CSV_URL, { download: true, header: true, skipEmptyLines: true, transformHeader: h => (h.trim().charAt(0).toLowerCase() + h.slice(1)).replace(/\s+/g, ''), complete: r => { allReviews = r.data.map((i,x)=>({...i, row:x+2, isApproved:String(i.approval||'false').trim().toLowerCase()==='true'})); resolve(); }, error: e => reject(e) })),
                 new Promise((resolve, reject) => Papa.parse(GIG_LIST_CSV_URL, { download: true, header: true, skipEmptyLines: true, transformHeader: h => h.trim().toLowerCase(), complete: r => { allGigs = r.data.map((g,i)=>({name:g.name||"",bandWebsite:g["band website"]||"",bandEmail:g["band email"]||"",venueName:g["venue name"]||"",address:g.address||"",venueWebsite:g["venue website"]||"",venuePhone:g["venue phone number"]||"",venueEmail:g["venue email"]||"",date:g.date||"",time:g.time||"",googleMapsLink:g["google maps link"]||"",latitude:g.latitude||"",longitude:g.longitude||"",row:i+2})); resolve(); }, error: e => reject(e) })),
                 new Promise((resolve, reject) => Papa.parse(GALLERY_CSV_URL, { download: true, header: true, skipEmptyLines: true, transformHeader: h => h.trim().toLowerCase().replace(/\s+/g, ''), complete: r => { allGalleryItems = r.data.map((i,x)=>({imageUrl:i.imageurl||"",text:i.text||"",website:i.website||"",row:x+2})); resolve(); }, error: e => reject(e) })),
-                new Promise((resolve, reject) => Papa.parse(VENUES_CSV_URL, { download: true, header: true, skipEmptyLines: true, transformHeader: h => h.trim().toLowerCase().replace(/\s+/g, ''), complete: r => { allVenues = r.data.map((v,i)=>({name:v.name||v.venuename||"",address:v.address||v.venueaddress||"",website:v.website||v.venuewebsite||"",phone:v.phone||v.venuephonenumber||"",latitude:v.latitude||"",longitude:v.longitude||"",row:i+2})); resolve(); }, error: e => reject(e) }))
+                new Promise((resolve, reject) => Papa.parse(VENUES_CSV_URL, { download: true, header: true, skipEmptyLines: true, transformHeader: h => h.trim().toLowerCase().replace(/\s+/g, ''), complete: r => { allVenues = r.data.map((v,i)=>({name:v.name||v.venuename||"",address:v.address||v.venueaddress||"",website:v.website||v.venuewebsite||"",phone:v.phone||v.venuephonenumber||"",latitude:v.latitude||"",longitude:v.longitude||"",row:i+2})); resolve(); }, error: e => reject(e) })),
+                new Promise((resolve, reject) => {
+                    fetch(`${APPS_SCRIPT_URL}?action=getNewsletterSubs`)
+                        .then(res => {
+                            if (!res.ok) throw new Error(`Server error fetching newsletter data.`);
+                            return res.json();
+                        })
+                        .then(data => {
+                            if (data.status && data.status === 'error') {
+                                throw new Error(data.message);
+                            }
+                            allNewsletterSubs = data;
+                            resolve();
+                        })
+                        .catch(e => reject(e));
+                })
             ];
             await Promise.all(fetchPromises);
             refreshAllUI();
@@ -484,6 +543,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 else if (type === "Gig") allGigs = allGigs.filter(i => i.row != rowId);
                 else if (type === "Venue") allVenues = allVenues.filter(i => i.row != rowId);
                 else if (type === "Gallery Item") allGalleryItems = allGalleryItems.filter(i => i.row != rowId);
+                else if (type === "NewsletterSub") allNewsletterSubs = allNewsletterSubs.filter(i => i.row != rowId);
                 refreshAllUI();
             } else { // Approve/Unapprove
                 const reviewToUpdate = allReviews.find(i => i.row == rowId);
@@ -611,6 +671,39 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) { showCustomAlert(`Error: ${error.message}`, "error"); } 
         finally { submitBtn.disabled = false, submitBtn.textContent = isAddMode ? "Add to Gallery" : "Save Changes"; if (isAddMode) { form.reset(); document.getElementById('add-preview-img').src = 'https://via.placeholder.com/400x200.png?text=Image+Preview'; document.getElementById('add-preview-text').textContent = 'Your text will appear here.'; } }
     };
+    const submitNewsletterForm = async e => {
+        e.preventDefault();
+        const form = e.target, isAddMode = form.id === 'add-newsletter-form', submitBtn = form.querySelector('button[type="submit"]');
+        submitBtn.disabled = true, submitBtn.textContent = isAddMode ? "Adding..." : "Saving...";
+        const formData = new FormData(form);
+        formData.append("action", isAddMode ? "addNewsletterSub" : "updateNewsletterSub");
+        try {
+            const response = await fetch(APPS_SCRIPT_URL, { method: "POST", body: formData });
+            if (!response.ok) throw new Error("Server communication error.");
+            const result = await response.json();
+            if (result.status !== 'success') throw new Error(result.message);
+            
+            if (isAddMode) {
+                showCustomAlert("Subscriber added successfully!", "success");
+                allNewsletterSubs.push(result.newSubscriber);
+            } else {
+                showCustomAlert("Subscriber updated successfully!", "success");
+                const rowId = formData.get('rowId');
+                const itemIndex = allNewsletterSubs.findIndex(i => i.row == rowId);
+                if (itemIndex > -1) {
+                    allNewsletterSubs[itemIndex] = { ...allNewsletterSubs[itemIndex], ...Object.fromEntries(formData.entries()) };
+                }
+            }
+            (isAddMode ? addNewsletterModal : editNewsletterModal).classList.add('hidden');
+            if (isAddMode) form.reset();
+            refreshAllUI();
+        } catch (error) { 
+            showCustomAlert(`Error: ${error.message}`, "error"); 
+        } finally { 
+            submitBtn.disabled = false;
+            submitBtn.textContent = isAddMode ? "Add Subscriber" : "Save Changes";
+        }
+    };
 
     // --- Geolocation Logic ---
     const runGeolocation = async (type) => {
@@ -652,9 +745,11 @@ document.addEventListener('DOMContentLoaded', () => {
     gigsTableBody.addEventListener("click", async e => {const t=e.target.closest("button");if(!t)return;const a=t.closest("tr").dataset.rowId,d=allGigs.find(g=>g.row==a);if(d){if(t.classList.contains("edit-gig-btn")){const g=editGigForm,o=parseTime(d.time);g.elements.rowId.value=d.row,g.elements.date.value=normalizeDate(d.date),g.elements.hour.value=o.hour,g.elements.minutes.value=o.minutes,g.elements.ampm.value=o.ampm,g.elements.name.value=d.name||"",g.elements.address.value=d.address||"",g.elements.googleMapsLink.value=d.googleMapsLink||"",g.elements.band_website.value=d.bandWebsite||"",g.elements.band_email.value=d.bandEmail||"",g.elements.venue_name.value=d.venueName||"",g.elements.venue_website.value=d.venueWebsite||"",g.elements.venue_phone_number.value=d.venuePhone||"",g.elements.venue_email.value=d.venueEmail||"",g.elements.latitude.value=d.latitude||"",g.elements.longitude.value=d.longitude||"",editGigModal.classList.remove("hidden")}else if(t.classList.contains("delete-gig-btn"))try{await showConfirm("Delete Gig?",`Are you sure you want to permanently delete the gig for ${d.name} on ${d.date}?`),handleAction("deleteGig",a,t,"Gig")}catch(e){}}});
     venuesTableBody.addEventListener("click", async e => {const t=e.target.closest("button");if(!t)return;const a=t.closest("tr").dataset.rowId,d=allVenues.find(v=>v.row==a);if(d){if(t.classList.contains("edit-venue-btn")){const v=editVenueForm;v.elements.rowId.value=d.row,v.elements.venueName.value=d.name||"",v.elements.venueAddress.value=d.address||"",v.elements.venueWebsite.value=d.website||"",v.elements.venuePhoneNumber.value=d.phone||"",v.elements.latitude.value=d.latitude||"",v.elements.longitude.value=d.longitude||"",editVenueModal.classList.remove("hidden")}else if(t.classList.contains("delete-venue-btn"))try{await showConfirm("Delete Venue?",`Are you sure you want to permanently delete the venue "${d.name}"?`),handleAction("deleteVenue",a,t,"Venue")}catch(e){}}});
     galleryTableBody.addEventListener("click", async e => {const t=e.target.closest("button");if(!t)return;const a=t.closest("tr").dataset.rowId,d=allGalleryItems.find(i=>i.row==a);if(d){if(t.classList.contains("edit-gallery-btn")){const i=editGalleryForm;i.elements.rowId.value=d.row,i.elements.imageUrl.value=d.imageUrl||"",i.elements.text.value=d.text||"",i.elements.website.value=d.website||"",document.getElementById("edit-preview-img").src=d.imageUrl||"https://via.placeholder.com/400x200.png?text=Image+Preview",document.getElementById("edit-preview-text").textContent=d.text||"",editGalleryModal.classList.remove("hidden")}else if(t.classList.contains("delete-gallery-btn"))try{await showConfirm("Delete Gallery Item?","Are you sure you want to permanently delete this gallery item?"),handleAction("deleteGalleryItem",a,t,"Gallery Item")}catch(e){}}});
+    newsletterTableBody.addEventListener("click", async e => { const t = e.target.closest("button"); if (!t) return; const a = t.closest("tr").dataset.rowId; const sub = allNewsletterSubs.find(s => s.row == a); if (!sub) return; if (t.classList.contains("edit-newsletter-btn")) { const form = editNewsletterForm; form.elements.rowId.value = sub.row; form.elements.email.value = sub.email || ""; form.elements.timestamp.value = sub.timestamp || ""; editNewsletterModal.classList.remove("hidden"); } else if (t.classList.contains("delete-newsletter-btn")) { try { await showConfirm("Delete Subscriber?", `Are you sure you want to permanently delete the subscriber "${sub.email}"?`); handleAction("deleteNewsletterSub", a, t, "NewsletterSub"); } catch (e) { /* User cancelled */ } } });
     addGigBtn.addEventListener('click', () => { addGigForm.reset(); addGigModal.classList.remove('hidden'); });
     addVenueBtn.addEventListener('click', () => { addVenueForm.reset(); addVenueModal.classList.remove('hidden'); });
     addGalleryBtn.addEventListener('click', () => { addGalleryForm.reset(); document.getElementById('add-preview-img').src='https://via.placeholder.com/400x200.png?text=Image+Preview'; document.getElementById('add-preview-text').textContent='Your text will appear here.'; addGalleryModal.classList.remove('hidden'); });
+    addNewsletterBtn.addEventListener('click', () => { addNewsletterForm.reset(); addNewsletterModal.classList.remove('hidden'); });
     runGeolocationBtn.addEventListener('click', () => runGeolocation('gigs'));
     runVenueGeolocationBtn.addEventListener('click', () => runGeolocation('venues'));
     addGigForm.addEventListener("submit",submitGigForm);
@@ -663,6 +758,8 @@ document.addEventListener('DOMContentLoaded', () => {
     editVenueForm.addEventListener('submit', submitVenueForm);
     addGalleryForm.addEventListener("submit", submitGalleryForm);
     editGalleryForm.addEventListener("submit", submitGalleryForm);
+    addNewsletterForm.addEventListener("submit", submitNewsletterForm);
+    editNewsletterForm.addEventListener("submit", submitNewsletterForm);
     const setupPreview = (formId, imgId, textId, defaultText) => { const form = document.getElementById(formId), img = document.getElementById(imgId), text = document.getElementById(textId), urlInput = form.elements.imageUrl, textInput = form.elements.text; urlInput.addEventListener('input', () => { img.src = urlInput.value || 'https://via.placeholder.com/400x200.png?text=Image+Preview'; }); textInput.addEventListener('input', () => { text.textContent = textInput.value || defaultText; }); };
     setupPreview('add-gallery-form', 'add-preview-img', 'add-preview-text', 'Your text will appear here.');
     setupPreview('edit-gallery-form', 'edit-preview-img', 'edit-preview-text', '');
