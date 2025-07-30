@@ -240,7 +240,7 @@
             </div>
         </div>
         
-        <div id="newsletter-content" class="hidden">
+<div id="newsletter-content" class="hidden">
     <div class="flex flex-col sm:flex-row justify-between sm:items-center mb-8 gap-4">
         <h1 class="text-2xl sm:text-3xl font-bold text-slate-900">Newsletter Subscriptions</h1>
         <div class="flex items-center gap-2">
@@ -252,33 +252,34 @@
             </button>
         </div>
     </div>
-    </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-                <div class="bg-white p-6 rounded-xl shadow-md border flex items-center">
-                    <div class="p-4 bg-rose-100 text-rose-600 rounded-full mr-4"><i class="fas fa-users fa-2x"></i></div>
-                    <div><p class="text-sm text-slate-500 font-medium">Total Subscribers</p><p id="stat-total-newsletter" class="text-3xl font-bold">0</p></div>
-                </div>
-            </div>
-            <div class="bg-white rounded-xl shadow-md border overflow-hidden">
-                <h2 class="text-xl font-semibold p-6 border-b">Manage Subscribers</h2>
-                <div class="overflow-x-auto">
-                    <table class="admin-table w-full text-sm text-left">
-                        <thead class="text-xs uppercase">
-                            <tr>
-                                <th class="px-2 md:px-6 py-3">#</th>
-                                <th class="px-2 md:px-6 py-3">Email</th>
-                                <th class="px-2 md:px-6 py-3">Subscribed On (MM-DD-YYYY)</th>
-                                <th class="px-2 md:px-6 py-3 text-center">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="newsletter-table-body"></tbody>
-                    </table>
-                    <div id="no-newsletter-message" class="text-center py-12 px-6"><p class="text-slate-500">Loading Subscribers...</p></div>
-                </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        <div class="bg-white p-6 rounded-xl shadow-md border flex items-center">
+            <div class="p-4 bg-rose-100 text-rose-600 rounded-full mr-4"><i class="fas fa-users fa-2x"></i></div>
+            <div>
+                <p class="text-sm text-slate-500 font-medium">Total Subscribers</p>
+                <p id="stat-total-newsletter" class="text-3xl font-bold">0</p>
             </div>
         </div>
-
-    </main>
+    </div>
+    <div class="bg-white rounded-xl shadow-md border overflow-hidden">
+        <h2 class="text-xl font-semibold p-6 border-b">Manage Subscribers</h2>
+        <div class="overflow-x-auto">
+            <table class="admin-table w-full text-sm text-left">
+                <thead class="text-xs uppercase">
+                    <tr>
+                        <th class="px-2 md:px-6 py-3">#</th>
+                        <th class="px-2 md:px-6 py-3">Email</th>
+                        <th class="px-2 md:px-6 py-3">Subscribed On (MM-DD-YYYY)</th>
+                        <th class="px-2 md:px-6 py-3 text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="newsletter-table-body"></tbody>
+            </table>
+            <div id="no-newsletter-message" class="text-center py-12 px-6">
+                <p class="text-slate-500">Loading Subscribers...</p>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div id="edit-gig-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-start justify-center p-4 hidden overflow-y-auto"><div class="w-full max-w-3xl bg-white rounded-xl shadow-2xl m-4"><div class="p-6 border-b flex justify-between items-center"><h2 class="text-2xl font-bold text-slate-800">Edit Gig</h2><button class="modal-close-btn text-slate-400 hover:text-slate-600 text-2xl">&times;</button></div><form id="edit-gig-form" class="p-6"><input type="hidden" name="rowId"><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"><div><label class="text-sm font-medium">Date</label><input type="date" name="date" class="w-full mt-1 p-2 border rounded-md"></div><div><label class="text-sm font-medium">Time</label><div class="flex items-center mt-1"><input type="text" name="hour" placeholder="H" maxlength="2" class="w-12 p-2 border rounded-md text-center"><span class="font-bold mx-1">:</span><input type="text" name="minutes" placeholder="MM" maxlength="2" class="w-16 p-2 border rounded-md text-center"><select name="ampm" class="ml-2 p-2 border rounded-md bg-white"><option>AM</option><option>PM</option></select></div></div><div><label class="text-sm font-medium">Band Name</label><input type="text" name="name" class="w-full mt-1 p-2 border rounded-md"></div><div class="lg:col-span-3"><label class="text-sm font-medium">Address</label><input type="text" name="address" class="w-full mt-1 p-2 border rounded-md"></div><div class="lg:col-span-3"><label class="text-sm font-medium">Google Maps Link</label><input type="url" name="googleMapsLink" class="w-full mt-1 p-2 border rounded-md"></div><div><label class="text-sm font-medium">Latitude</label><input type="text" name="latitude" placeholder="e.g., 40.7128" class="w-full mt-1 p-2 border rounded-md"></div><div><label class="text-sm font-medium">Longitude</label><input type="text" name="longitude" placeholder="e.g., -74.0060" class="w-full mt-1 p-2 border rounded-md"></div><div><label class="text-sm font-medium">Band Website</label><input type="url" name="band_website" class="w-full mt-1 p-2 border rounded-md"></div><div><label class="text-sm font-medium">Band Email</label><input type="email" name="band_email" class="w-full mt-1 p-2 border rounded-md"></div><div><label class="text-sm font-medium">Venue Name</label><input type="text" name="venue_name" class="w-full mt-1 p-2 border rounded-md"></div><div><label class="text-sm font-medium">Venue Website</label><input type="url" name="venue_website" class="w-full mt-1 p-2 border rounded-md"></div><div><label class="text-sm font-medium">Venue Phone</label><input type="tel" name="venue_phone_number" class="w-full mt-1 p-2 border rounded-md"></div><div><label class="text-sm font-medium">Venue Email</label><input type="email" name="venue_email" class="w-full mt-1 p-2 border rounded-md"></div></div><div class="mt-6 flex justify-end gap-4"><button type="button" class="modal-cancel-btn px-4 py-2 bg-slate-200 rounded-md">Cancel</button><button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md">Save Changes</button></div></form></div></div>
