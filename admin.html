@@ -1071,7 +1071,7 @@ const submitNewsletterBroadcast = async e => {
     // --- EMAIL TEMPLATE BUILDER ---
     const subject = newsletterPreview.subject.textContent;
     const introText = newsletterPreview.body.innerHTML.replace(/\n/g, '<br>');
-    
+
     // Loop through the input controls to get image and band name data
     let imageCardsHTML = '';
     const inputGroups = document.querySelectorAll('.image-input-group');
@@ -1079,17 +1079,35 @@ const submitNewsletterBroadcast = async e => {
         const imageUrl = group.querySelector('.image-url-input').value;
         const bandName = group.querySelector('.band-name-input').value;
 
-        if (imageUrl && bandName) {
-            // This creates the HTML for a single styled card
+        // *** THIS IS THE FIX ***
+        // Only require an image URL to create the card.
+        if (imageUrl) {
+            // Updated HTML for a single, more robust email-friendly card
             imageCardsHTML += `
-                <table border="0" cellpadding="0" cellspacing="0" width="224" style="border-collapse: collapse;">
-                    <tr>
-                        <td style="padding: 12px; background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; text-align: center; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1);">
-                            <img src="${imageUrl}" width="200" style="width: 200px; height: 175px; object-fit: cover; border-radius: 8px; margin-bottom: 12px; display: block;">
-                            <p style="font-family: sans-serif; font-size: 16px; font-weight: 700; color: #1e293b; margin: 0;">${bandName}</p>
-                        </td>
-                    </tr>
-                </table>
+                <td class="stack-column" width="33.33%" style="width: 33.33%; padding: 10px;" valign="top">
+                    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse;">
+                        <tr>
+                            <td style="padding: 12px; background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; text-align: center; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1);">
+                                <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse;">
+                                    <tr>
+                                        <td align="center" style="padding-bottom: 12px;">
+                                            <img src="${imageUrl}"
+                                                 width="200"
+                                                 height="175"
+                                                 style="width: 100%; max-width: 200px; height: 175px; object-fit: cover; border-radius: 8px; display: block;"
+                                                 alt="${bandName || 'Band Image'}">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center" style="padding: 0;">
+                                            <p style="font-family: sans-serif; font-size: 16px; font-weight: 700; color: #1e293b; margin: 0;">${bandName || '&nbsp;'}</p>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
             `;
         }
     });
@@ -1102,12 +1120,20 @@ const submitNewsletterBroadcast = async e => {
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>${subject}</title>
+            <style>
+                /* Basic styling for responsiveness */
+                @media screen and (max-width: 600px) {
+                    .main-table { width: 100% !important; }
+                    .stack-column { display: block !important; width: 100% !important; max-width: 100% !important; padding: 10px 10px !important; box-sizing: border-box !important; }
+                    .stack-column img { max-width: 100% !important; height: auto !important; }
+                }
+            </style>
         </head>
         <body style="margin: 0; padding: 0; background-color: #f8fafc;">
             <table border="0" cellpadding="0" cellspacing="0" width="100%">
                 <tr>
                     <td align="center" style="padding: 20px 0;">
-                        <table border="0" cellpadding="0" cellspacing="0" width="600" style="border-collapse: collapse; max-width: 600px; background-color: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0;">
+                        <table border="0" cellpadding="0" cellspacing="0" width="600" class="main-table" style="border-collapse: collapse; max-width: 600px; background-color: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0;">
                             <tr>
                                 <td align="center" style="padding: 30px 20px; border-bottom: 1px solid #e2e8f0;">
                                     <h1 style="font-family: sans-serif; font-size: 28px; color: #1e293b; margin: 0;">${subject}</h1>
@@ -1119,9 +1145,13 @@ const submitNewsletterBroadcast = async e => {
                                 </td>
                             </tr>
                             <tr>
-                                <td align="center" style="padding: 10px 0 30px 0;">
-                                    ${imageCardsHTML}
-                                </td>
+                                <td align="center" style="padding: 10px 0 30px 0; font-size: 0;">
+                                    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse; max-width: 600px;">
+                                        <tr>
+                                            ${imageCardsHTML}
+                                        </tr>
+                                    </table>
+                                    </td>
                             </tr>
                             <tr>
                                 <td align="center" style="padding: 20px; background-color: #f1f5f9; border-bottom-left-radius: 12px; border-bottom-right-radius: 12px;">
@@ -1136,7 +1166,7 @@ const submitNewsletterBroadcast = async e => {
         </html>
     `;
 
-    // --- SEND LOGIC (No changes here) ---
+    // --- SEND LOGIC ---
     try {
         const response = await fetch(NEWSLETTER_SCRIPT_URL, {
             method: "POST",
@@ -1146,9 +1176,9 @@ const submitNewsletterBroadcast = async e => {
                 htmlBody
             }),
         });
-        
+
         if (!response.ok) {
-           const errorResult = await response.json();
+           const errorResult = await response.json().catch(() => ({ message: 'The script returned an error without details.' }));
            throw new Error(errorResult.message || 'The script returned an error.');
         }
 
